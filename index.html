@@ -13,7 +13,7 @@
             --primary: #4cc9f0;
             --secondary: #f72585;
             --background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            --container-bg: rgba(0, 0, 0, 0.9);
+            --container-bg: rgba(0, 0, 0, 0.95);
         }
 
         .theme-sun { --background: linear-gradient(135deg, #ff9d00, #ff2e00, #ff0099); --primary: #ff9d00; --secondary: #ff0099; }
@@ -41,6 +41,7 @@
             position: fixed;
             width: 100%;
             height: 100%;
+            background: #000;
         }
 
         body {
@@ -52,26 +53,22 @@
             color: white;
             overflow: hidden;
             -webkit-overflow-scrolling: touch;
-            /* Добавляем отступ сверху для безопасной зоны iPhone */
-            padding-top: env(safe-area-inset-top);
         }
 
         .container {
             width: 100%;
             height: 100%;
-            padding: 15px 10px 10px 10px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             background: var(--container-bg);
-            /* Дополнительный отступ сверху */
-            padding-top: max(15px, env(safe-area-inset-top));
         }
 
         .header {
             flex-shrink: 0;
             margin-bottom: 10px;
-            /* Смещаем header немного вниз */
-            margin-top: 5px;
+            padding: max(20px, env(safe-area-inset-top)) 15px 0 15px;
+            background: var(--container-bg);
         }
 
         .title-row {
@@ -87,8 +84,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            /* Увеличиваем отступ сверху для заголовка */
-            margin-top: 5px;
         }
 
         .basket-btn {
@@ -104,7 +99,6 @@
             justify-content: center;
             font-size: 1.5rem;
             transition: all 0.3s ease;
-            margin-top: 5px;
         }
 
         .basket-btn:hover {
@@ -168,8 +162,7 @@
             gap: 10px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            /* Добавляем небольшой отступ сверху для контента */
-            margin-top: 5px;
+            padding: 0 15px 15px 15px;
         }
 
         .period {
@@ -244,7 +237,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.98);
             padding: 10px;
             display: none;
             grid-template-columns: repeat(4, 1fr);
@@ -252,6 +245,7 @@
             z-index: 1000;
             border-radius: 12px 12px 0 0;
             max-height: 35vh;
+            border-top: 1px solid var(--primary);
         }
 
         .keyboard.active {
@@ -285,7 +279,7 @@
             position: absolute;
             top: -35px;
             right: 10px;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             color: white;
             border: none;
             border-radius: 50%;
@@ -293,6 +287,7 @@
             height: 30px;
             cursor: pointer;
             font-size: 1.1rem;
+            border: 1px solid var(--primary);
         }
 
         .period-third {
@@ -300,9 +295,14 @@
         }
 
         @media (max-width: 768px) {
-            .container { 
-                padding: max(15px, env(safe-area-inset-top)) 8px 8px 8px; 
+            .header {
+                padding: max(15px, env(safe-area-inset-top)) 10px 0 10px;
             }
+            
+            .content {
+                padding: 0 10px 10px 10px;
+            }
+            
             h1 { font-size: 1.2rem; }
             .basket-btn { width: 40px; height: 40px; font-size: 1.3rem; }
             .period { padding: 8px; }
@@ -311,24 +311,6 @@
             .result { padding: 10px; font-size: 1rem; }
             .keyboard { padding: 8px; gap: 4px; max-height: 32vh; }
             .key { min-height: 40px; padding: 10px 5px; font-size: 1rem; }
-            
-            /* Увеличиваем отступы для мобильных устройств */
-            .header {
-                margin-top: 8px;
-            }
-            .content {
-                margin-top: 8px;
-            }
-        }
-
-        /* Дополнительные стили для очень высоких устройств */
-        @media (min-height: 800px) {
-            .container {
-                padding-top: max(20px, env(safe-area-inset-top));
-            }
-            .header {
-                margin-top: 10px;
-            }
         }
     </style>
 </head>
@@ -493,7 +475,7 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                background: rgba(0, 0, 0, 0.8);
+                background: rgba(0, 0, 0, 0.9);
                 color: white;
                 padding: 10px 20px;
                 border-radius: 8px;
