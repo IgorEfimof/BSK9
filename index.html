@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <link rel="apple-touch-icon" sizes="180x180" href="icons/icon210.png">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="BSK9">
@@ -26,6 +26,21 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        html, body {
+            touch-action: manipulation;
+            -webkit-text-size-adjust: none;
+            text-size-adjust: none;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
         body {
@@ -36,6 +51,7 @@
             background: var(--background);
             color: white;
             overflow: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .container {
@@ -142,6 +158,7 @@
             flex-direction: column;
             gap: 10px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .period {
@@ -186,6 +203,11 @@
             text-align: center;
             color: #000;
             font-weight: bold;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: pointer;
         }
 
         .vs-text {
@@ -373,6 +395,25 @@
     <script>
         let currentInput = null;
         let currentMode = 'two';
+
+        // Предотвращение двойного тапа
+        document.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        // Предотвращение масштабирования жестом
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('gesturechange', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('gestureend', function(e) {
+            e.preventDefault();
+        });
 
         function setMode(mode) {
             currentMode = mode;
