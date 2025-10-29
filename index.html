@@ -231,6 +231,16 @@
             margin-top: 5px;
         }
 
+        .additional-result {
+            text-align: center;
+            font-size: 1rem;
+            padding: 10px;
+            background: rgba(247, 37, 133, 0.2);
+            border-radius: 8px;
+            border: 2px solid var(--secondary);
+            margin-top: 5px;
+        }
+
         /* Кастомная клавиатура */
         .keyboard {
             position: fixed;
@@ -309,6 +319,7 @@
             .teams-row { gap: 6px; }
             .score-input { padding: 8px; font-size: 1rem; }
             .result { padding: 10px; font-size: 1rem; }
+            .additional-result { padding: 8px; font-size: 0.9rem; }
             .keyboard { padding: 8px; gap: 4px; max-height: 32vh; }
             .key { min-height: 40px; padding: 10px 5px; font-size: 1rem; }
         }
@@ -386,6 +397,10 @@
             <div id="result" class="result" style="display: none;">
                 Тотал: <strong><span id="totalValue">0</span></strong>
             </div>
+
+            <div id="additionalResult" class="additional-result" style="display: none;">
+                Доп. расчет: <strong><span id="additionalValue">0</span></strong>
+            </div>
         </div>
     </div>
 
@@ -434,10 +449,14 @@
             event.target.classList.add('active');
             
             const thirdPeriod = document.getElementById('third-period');
+            const additionalResult = document.getElementById('additionalResult');
+            
             if (mode === 'three') {
                 thirdPeriod.style.display = 'block';
+                additionalResult.style.display = 'none'; // Скрываем доп. расчет при переключении
             } else {
                 thirdPeriod.style.display = 'none';
+                additionalResult.style.display = 'none';
             }
             
             document.getElementById('result').style.display = 'none';
@@ -456,8 +475,9 @@
                 input.value = '0';
             });
             
-            // Скрываем результат
+            // Скрываем результаты
             document.getElementById('result').style.display = 'none';
+            document.getElementById('additionalResult').style.display = 'none';
             
             // Скрываем клавиатуру если открыта
             hideKeyboard();
@@ -542,6 +562,7 @@
 
         function calculateTotal() {
             let total;
+            let additionalTotal = null;
             
             if (currentMode === 'two') {
                 const team1p1 = parseInt(document.getElementById('team1-period1').value) || 0;
@@ -571,6 +592,7 @@
                 const totalSecondPeriod = team1p2 + team2p2;
                 const totalThirdPeriod = team1p3 + team2p3;
                 
+                // Основной расчет для трех периодов
                 total = (totalFirstPeriod + totalSecondPeriod + totalThirdPeriod) * (4/3);
                 
                 if (totalThirdPeriod > totalSecondPeriod) {
@@ -580,10 +602,32 @@
                 }
                 
                 total = Math.round(total);
+
+                // Дополнительный расчет (усреднение с расчетом по двум периодам)
+                const twoPeriodTotal = (totalFirstPeriod + totalSecondPeriod) * 2;
+                const diffTwoPeriods = Math.abs(totalFirstPeriod - totalSecondPeriod);
+                
+                let adjustedTwoPeriodTotal = twoPeriodTotal;
+                if (totalFirstPeriod > totalSecondPeriod) {
+                    adjustedTwoPeriodTotal += diffTwoPeriods;
+                } else {
+                    adjustedTwoPeriodTotal -= diffTwoPeriods;
+                }
+
+                // Усредняем основной расчет трех периодов с расчетом двух периодов
+                additionalTotal = Math.round((total + adjustedTwoPeriodTotal) / 2);
             }
 
             document.getElementById('totalValue').textContent = total;
             document.getElementById('result').style.display = 'block';
+            
+            // Показываем дополнительный расчет только для трех периодов
+            if (currentMode === 'three' && additionalTotal !== null) {
+                document.getElementById('additionalValue').textContent = additionalTotal;
+                document.getElementById('additionalResult').style.display = 'block';
+            } else {
+                document.getElementById('additionalResult').style.display = 'none';
+            }
             
             setTimeout(() => {
                 document.getElementById('result').scrollIntoView({ 
