@@ -360,6 +360,119 @@
             transition: width 0.5s ease;
         }
 
+        /* Стили для магического квадрата */
+        .magic-square-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .magic-square {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 4px;
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+        }
+
+        .magic-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .magic-cell.active {
+            background: var(--primary);
+            color: black;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .magic-cell.diagonal {
+            border-color: var(--secondary);
+        }
+
+        .magic-cell.diagonal.active {
+            background: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        .magic-sum {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        .magic-formula {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            text-align: center;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .magic-explanation {
+            font-size: 0.75rem;
+            color: #bdb2ff;
+            text-align: center;
+            margin-top: 5px;
+            line-height: 1.2;
+        }
+
+        .magic-result {
+            text-align: center;
+            font-size: 1rem;
+            padding: 10px;
+            background: rgba(76, 201, 240, 0.2);
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .magic-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .legend-primary {
+            background: var(--primary);
+        }
+
+        .legend-secondary {
+            background: var(--secondary);
+        }
+
         .keyboard {
             position: fixed;
             bottom: 0;
@@ -483,6 +596,11 @@
                 padding: 6px 10px;
                 font-size: 0.8rem;
             }
+            
+            .magic-square {
+                width: 180px;
+                height: 180px;
+            }
         }
 
         @media (max-height: 600px) {
@@ -502,6 +620,15 @@
             .prediction-method .result {
                 font-size: 0.7rem;
             }
+            
+            .magic-square {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .magic-cell {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -515,6 +642,7 @@
         <div class="tabs">
             <button class="tab active" onclick="setTab('calculator')">Калькулятор</button>
             <button class="tab" onclick="setTab('visualization')">Аналитика</button>
+            <button class="tab" onclick="setTab('magic')">Магический квадрат</button>
         </div>
         <div class="mode-switcher">
             <button class="mode-btn active" onclick="setMode('two')">2 периода</button>
@@ -626,6 +754,44 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Новая вкладка с магическим квадратом -->
+        <div class="tab-content" id="magic-tab">
+            <div class="magic-square-container">
+                <h2>Магический квадрат Сидика Авгана</h2>
+                
+                <div class="magic-explanation">
+                    Магический квадрат преобразует данные периодов в числовую матрицу для прогнозирования
+                </div>
+                
+                <div class="magic-square" id="magicSquare">
+                    <!-- Ячейки заполняются JavaScript -->
+                </div>
+                
+                <div class="magic-sum">
+                    Магическая сумма: <span id="magicSum">0</span>
+                </div>
+                
+                <div class="magic-formula">
+                    Формула: √(ΣP²) × k + Δ
+                </div>
+                
+                <div class="magic-result" id="magicResult" style="display:none">
+                    Магический прогноз: <strong><span id="magicPrediction">0</span></strong>
+                </div>
+                
+                <div class="magic-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-primary"></div>
+                        <span>Активные ячейки</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-secondary"></div>
+                        <span>Диагональ силы</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -664,6 +830,8 @@ function setTab(tab) {
     
     if (tab === 'visualization') {
         updateVisualization();
+    } else if (tab === 'magic') {
+        updateMagicSquare();
     }
 }
 
@@ -688,6 +856,8 @@ function setMode(mode) {
     
     if (currentTab === 'visualization') {
         updateVisualization();
+    } else if (currentTab === 'magic') {
+        updateMagicSquare();
     }
 }
 
@@ -707,11 +877,14 @@ function clearAllData() {
     
     document.getElementById('result').style.display = 'none';
     document.getElementById('additionalResult').style.display = 'none';
+    document.getElementById('magicResult').style.display = 'none';
     
     hideKeyboard();
     
     if (currentTab === 'visualization') {
         updateVisualization();
+    } else if (currentTab === 'magic') {
+        updateMagicSquare();
     }
     
     showClearNotification();
@@ -763,6 +936,8 @@ function hideKeyboardWithCalculation() {
     calculateTotal();
     if (currentTab === 'visualization') {
         updateVisualization();
+    } else if (currentTab === 'magic') {
+        updateMagicSquare();
     }
 }
 
@@ -795,6 +970,8 @@ document.querySelectorAll('.score-input').forEach(input => {
     input.addEventListener('input', function() {
         if (currentTab === 'visualization') {
             updateVisualization();
+        } else if (currentTab === 'magic') {
+            updateMagicSquare();
         }
     });
 });
@@ -887,6 +1064,8 @@ document.querySelectorAll('.score-input').forEach(input => {
             calculateTotal();
             if (currentTab === 'visualization') {
                 updateVisualization();
+            } else if (currentTab === 'magic') {
+                updateMagicSquare();
             }
         }
     });
@@ -1006,6 +1185,115 @@ function calculateRiskLevel(data) {
     if (cv < 15) return { level: "low", text: "Низкий риск", icon: "✅" };
     if (cv < 30) return { level: "medium", text: "Умеренный риск", icon: "⚠️" };
     return { level: "high", text: "Высокий риск", icon: "🚨" };
+}
+
+// Магический квадрат Сидика Авгана
+function updateMagicSquare() {
+    const magicSquare = document.getElementById('magicSquare');
+    magicSquare.innerHTML = '';
+    
+    // Получаем данные периодов
+    const team1p1 = parseInt(document.getElementById('team1-period1').value) || 0;
+    const team2p1 = parseInt(document.getElementById('team2-period1').value) || 0;
+    const team1p2 = parseInt(document.getElementById('team1-period2').value) || 0;
+    const team2p2 = parseInt(document.getElementById('team2-period2').value) || 0;
+    const team1p3 = parseInt(document.getElementById('team1-period3').value) || 0;
+    const team2p3 = parseInt(document.getElementById('team2-period3').value) || 0;
+    
+    const totalFirstPeriod = team1p1 + team2p1;
+    const totalSecondPeriod = team1p2 + team2p2;
+    const totalThirdPeriod = team1p3 + team2p3;
+    
+    // Создаем магический квадрат 3x3
+    const magicValues = createMagicSquare(totalFirstPeriod, totalSecondPeriod, totalThirdPeriod);
+    
+    // Заполняем визуальное представление
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'magic-cell';
+        cell.textContent = magicValues[i];
+        
+        // Определяем диагональные ячейки (0, 4, 8) и (2, 4, 6)
+        if (i === 0 || i === 4 || i === 8 || i === 2 || i === 6) {
+            cell.classList.add('diagonal');
+        }
+        
+        // Подсвечиваем активные ячейки (ненулевые значения)
+        if (magicValues[i] > 0) {
+            cell.classList.add('active');
+        }
+        
+        magicSquare.appendChild(cell);
+    }
+    
+    // Вычисляем магическую сумму и прогноз
+    const magicSum = calculateMagicSum(magicValues);
+    const magicPrediction = calculateMagicPrediction(magicValues, totalFirstPeriod, totalSecondPeriod, totalThirdPeriod);
+    
+    document.getElementById('magicSum').textContent = magicSum;
+    document.getElementById('magicPrediction').textContent = magicPrediction;
+    document.getElementById('magicResult').style.display = 'block';
+}
+
+function createMagicSquare(p1, p2, p3) {
+    // Базовый магический квадрат
+    const baseSquare = [4, 9, 2, 3, 5, 7, 8, 1, 6];
+    
+    // Адаптируем квадрат под наши данные
+    const adaptedSquare = baseSquare.map((value, index) => {
+        let multiplier;
+        
+        // Разные коэффициенты для разных позиций
+        switch(index) {
+            case 0: multiplier = p1 / 10; break;
+            case 1: multiplier = p2 / 10; break;
+            case 2: multiplier = p3 / 10; break;
+            case 3: multiplier = (p1 + p2) / 20; break;
+            case 4: multiplier = (p1 + p2 + p3) / 30; break;
+            case 5: multiplier = (p2 + p3) / 20; break;
+            case 6: multiplier = p3 / 10; break;
+            case 7: multiplier = p1 / 10; break;
+            case 8: multiplier = p2 / 10; break;
+            default: multiplier = 1;
+        }
+        
+        return Math.round(value * multiplier);
+    });
+    
+    return adaptedSquare;
+}
+
+function calculateMagicSum(magicValues) {
+    // Сумма первой строки (традиционная магическая сумма)
+    return magicValues[0] + magicValues[1] + magicValues[2];
+}
+
+function calculateMagicPrediction(magicValues, p1, p2, p3) {
+    // Усовершенствованный алгоритм прогнозирования на основе магического квадрата
+    const diagonal1 = magicValues[0] + magicValues[4] + magicValues[8]; // Главная диагональ
+    const diagonal2 = magicValues[2] + magicValues[4] + magicValues[6]; // Побочная диагональ
+    
+    const row1 = magicValues[0] + magicValues[1] + magicValues[2]; // Первая строка
+    const row2 = magicValues[3] + magicValues[4] + magicValues[5]; // Вторая строка
+    const row3 = magicValues[6] + magicValues[7] + magicValues[8]; // Третья строка
+    
+    const magicEnergy = (diagonal1 + diagonal2 + row1 + row2 + row3) / 5;
+    
+    // Учитываем динамику периодов
+    const periodTrend = p3 > p2 ? 1.1 : (p3 < p2 ? 0.9 : 1.0);
+    
+    // Финализируем прогноз
+    let prediction;
+    if (currentMode === 'two') {
+        prediction = (p1 + p2) * 2 * periodTrend;
+    } else {
+        prediction = (p1 + p2 + p3) * (4/3) * periodTrend;
+    }
+    
+    // Корректируем магической энергией
+    prediction = prediction * (1 + (magicEnergy - 15) / 100);
+    
+    return Math.round(prediction);
 }
 
 // Визуализация и обновление данных
@@ -1181,6 +1469,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const savedTheme = localStorage.getItem('selectedTheme') || 'sun';
     setTheme(savedTheme);
     document.querySelector(`[onclick="setTheme('${savedTheme}')"]`).classList.add('active');
+    
+    // Инициализируем магический квадрат
+    updateMagicSquare();
 });
 </script>
 </body>
