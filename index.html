@@ -3,10 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon210.png">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="BSK9">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Кибербаскетбол PRO</title>
     <style>
         :root {
@@ -53,25 +49,27 @@
             display: flex;
             flex-direction: column;
             background: var(--container-bg);
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         .header {
-            padding: max(10px, env(safe-area-inset-top)) 10px 0;
+            padding: max(5px, env(safe-area-inset-top)) 8px 0;
+            flex-shrink: 0;
         }
 
         .title-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         h1 {
             color: var(--primary);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .basket-btn {
@@ -80,12 +78,12 @@
             border-radius: 50%;
             color: var(--primary);
             cursor: pointer;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
 
         .tabs {
@@ -93,18 +91,18 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             padding: 2px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .tab {
             flex: 1;
-            padding: 6px 3px;
+            padding: 5px 2px;
             border: none;
             border-radius: 4px;
             background: transparent;
             color: white;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .tab.active {
@@ -118,18 +116,18 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             padding: 2px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .mode-btn {
             flex: 1;
-            padding: 6px 3px;
+            padding: 5px 2px;
             border: none;
             border-radius: 4px;
             background: transparent;
             color: white;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .mode-btn.active {
@@ -141,22 +139,22 @@
         .theme-switcher {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
+            gap: 3px;
         }
 
         .theme-btn {
-            padding: 6px 2px;
+            padding: 5px 1px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             background: rgba(255, 255, 255, 0.2);
             color: white;
-            min-height: 30px;
+            min-height: 26px;
         }
 
         .theme-btn.active {
-            box-shadow: 0 0 4px var(--primary);
+            box-shadow: 0 0 3px var(--primary);
             background: var(--primary);
             color: black;
         }
@@ -165,14 +163,16 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            padding: 0 10px 10px;
+            gap: 6px;
+            padding: 0 8px 8px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .tab-content {
             display: none;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             height: 100%;
         }
 
@@ -182,20 +182,20 @@
 
         .period {
             background: rgba(255, 255, 255, 0.1);
-            padding: 8px;
+            padding: 6px;
             border-radius: 6px;
         }
 
         h2 {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--secondary);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             text-align: center;
         }
 
         .teams-row {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
         }
 
@@ -206,19 +206,19 @@
         }
 
         label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #bdb2ff;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             text-align: center;
         }
 
         .score-input {
             width: 100%;
-            padding: 8px;
+            padding: 6px;
             border: 2px solid var(--primary);
             border-radius: 4px;
             background: rgba(255, 255, 255, 0.95);
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-align: center;
             color: #000;
             font-weight: bold;
@@ -228,14 +228,14 @@
         .vs-text {
             color: var(--primary);
             font-weight: bold;
-            font-size: 0.8rem;
-            margin: 0 2px;
+            font-size: 0.75rem;
+            margin: 0 1px;
         }
 
         .result {
             text-align: center;
-            font-size: 1rem;
-            padding: 10px;
+            font-size: 0.9rem;
+            padding: 8px;
             background: rgba(76, 201, 240, 0.2);
             border-radius: 6px;
             border: 2px solid var(--primary);
@@ -244,8 +244,8 @@
 
         .additional-result {
             text-align: center;
-            font-size: 0.9rem;
-            padding: 8px;
+            font-size: 0.85rem;
+            padding: 6px;
             background: rgba(247, 37, 133, 0.2);
             border-radius: 6px;
             border: 2px solid var(--secondary);
@@ -256,16 +256,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             flex: 1;
-            gap: 15px;
-            padding: 5px;
+            gap: 10px;
+            padding: 5px 0;
         }
 
         .triangle-container {
             position: relative;
-            width: 220px;
-            height: 220px;
+            width: 180px;
+            height: 180px;
             margin: 0 auto;
         }
 
@@ -278,11 +278,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 10px 15px;
+            gap: 6px;
+            padding: 8px 12px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
             font-weight: bold;
         }
 
@@ -304,55 +304,55 @@
         .prediction-panel {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-            padding: 12px;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 10px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .prediction-panel h3 {
             color: var(--primary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-align: center;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .prediction-method {
-            padding: 8px;
+            padding: 6px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
+            border-radius: 4px;
             border-left: 2px solid var(--secondary);
         }
 
         .prediction-method h4 {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--secondary);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .prediction-method .result {
-            font-size: 0.8rem;
-            padding: 4px;
+            font-size: 0.75rem;
+            padding: 3px;
             background: transparent;
             border: none;
-            margin-top: 2px;
+            margin-top: 1px;
             text-align: left;
         }
 
         .confidence-meter {
-            height: 8px;
+            height: 6px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            margin-top: 5px;
+            border-radius: 3px;
+            margin-top: 4px;
             overflow: hidden;
         }
 
         .confidence-fill {
             height: 100%;
             background: var(--primary);
-            border-radius: 4px;
+            border-radius: 3px;
             transition: width 0.5s ease;
         }
 
@@ -362,13 +362,13 @@
             left: 0;
             right: 0;
             background: rgba(0, 0, 0, 0.98);
-            padding: 8px;
+            padding: 6px;
             display: none;
             grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
+            gap: 3px;
             z-index: 1000;
             border-radius: 10px 10px 0 0;
-            max-height: 30vh;
+            max-height: 28vh;
             border-top: 1px solid var(--primary);
         }
 
@@ -377,15 +377,15 @@
         }
 
         .key {
-            padding: 10px 5px;
+            padding: 8px 4px;
             background: var(--primary);
             border: none;
             border-radius: 4px;
             color: black;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
-            min-height: 40px;
+            min-height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -401,16 +401,16 @@
 
         .close-keyboard {
             position: absolute;
-            top: -30px;
-            right: 8px;
+            top: -28px;
+            right: 6px;
             background: rgba(0, 0, 0, 0.95);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 25px;
-            height: 25px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             border: 1px solid var(--primary);
         }
 
@@ -422,12 +422,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 0.8rem;
+            gap: 4px;
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: bold;
-            margin-top: 5px;
+            margin-top: 4px;
         }
 
         .risk-low {
@@ -443,6 +443,61 @@
         .risk-high {
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid #ef4444;
+        }
+
+        /* Специальные стили для очень маленьких экранов */
+        @media (max-height: 700px) {
+            .header {
+                padding: max(3px, env(safe-area-inset-top)) 6px 0;
+            }
+            
+            .content {
+                gap: 4px;
+                padding: 0 6px 6px;
+            }
+            
+            .period {
+                padding: 4px;
+            }
+            
+            .triangle-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .prediction-panel {
+                padding: 8px;
+                gap: 6px;
+                margin-top: 6px;
+            }
+            
+            .prediction-method {
+                padding: 4px;
+            }
+            
+            .trend-indicator {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .triangle-container {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .prediction-panel h3 {
+                font-size: 0.8rem;
+            }
+            
+            .prediction-method h4 {
+                font-size: 0.7rem;
+            }
+            
+            .prediction-method .result {
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -806,13 +861,6 @@ function calculateTotal() {
     } else {
         document.getElementById('additionalResult').style.display = 'none';
     }
-    
-    setTimeout(() => {
-        document.getElementById('result').scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
-        });
-    }, 300);
 }
 
 // Автоматический расчет
