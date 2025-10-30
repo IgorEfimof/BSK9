@@ -285,6 +285,7 @@
             justify-content: center;
             flex: 1;
             gap: 20px;
+            padding: 10px;
         }
 
         .triangle-container {
@@ -313,14 +314,17 @@
 
         .trend-up {
             color: #4ade80;
+            border: 2px solid #4ade80;
         }
 
         .trend-down {
             color: #f87171;
+            border: 2px solid #f87171;
         }
 
         .trend-stable {
             color: #fbbf24;
+            border: 2px solid #fbbf24;
         }
 
         .point-label {
@@ -330,6 +334,46 @@
             padding: 4px 8px;
             border-radius: 6px;
             border: 1px solid var(--primary);
+        }
+
+        .scientific-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scientific-methods h3 {
+            color: var(--primary);
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .method {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .method h4 {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .method .result {
+            font-size: 0.85rem;
+            padding: 5px;
+            background: transparent;
+            border: none;
+            margin-top: 3px;
+            text-align: left;
         }
 
         /* Кастомная клавиатура */
@@ -415,6 +459,7 @@
             .key { min-height: 40px; padding: 10px 5px; font-size: 1rem; }
             .triangle-container { width: 240px; height: 240px; }
             .trend-indicator { padding: 10px 16px; font-size: 1rem; }
+            .scientific-methods { padding: 10px; }
         }
     </style>
 </head>
@@ -517,6 +562,27 @@
                     <div id="trendIndicator" class="trend-indicator">
                         <span id="trendIcon">↔️</span>
                         <span id="trendText">Тренд не определен</span>
+                    </div>
+                    
+                    <div class="scientific-methods">
+                        <h3>Математический анализ тренда</h3>
+                        
+                        <div class="method">
+                            <h4>1. Линейная регрессия</h4>
+                            <div class="result">Наклон: <span id="regressionSlope">0</span></div>
+                            <div class="result">R²: <span id="regressionR2">0</span></div>
+                        </div>
+                        
+                        <div class="method">
+                            <h4>2. Взвешенное скользящее среднее</h4>
+                            <div class="result">Тренд: <span id="weightedTrend">нейтральный</span></div>
+                        </div>
+                        
+                        <div class="method">
+                            <h4>3. Статистическая значимость</h4>
+                            <div class="result">p-value: <span id="pValue">-</span></div>
+                            <div class="result">Доверительный интервал: <span id="confidenceInterval">-</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -705,6 +771,12 @@
                 e.preventDefault();
                 this.blur();
             });
+            
+            input.addEventListener('input', function() {
+                if (currentTab === 'visualization') {
+                    updateVisualization();
+                }
+            });
         });
 
         function calculateTotal() {
@@ -810,6 +882,99 @@
             });
         });
 
+        // Научные методы анализа
+        function linearRegression(points) {
+            const n = points.length;
+            if (n < 2) return { slope: 0, intercept: 0 };
+            
+            const sumX = points.reduce((sum, p) => sum + p.x, 0);
+            const sumY = points.reduce((sum, p) => sum + p.y, 0);
+            const sumXY = points.reduce((sum, p) => sum + p.x * p.y, 0);
+            const sumX2 = points.reduce((sum, p) => sum + p.x * p.x, 0);
+            
+            const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            
+            return { slope, intercept };
+        }
+
+        function calculateR2(points, regression) {
+            if (points.length < 2) return 0;
+            
+            const yMean = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+            
+            const totalSumSquares = points.reduce((sum, p) => sum + Math.pow(p.y - yMean, 2), 0);
+            const residualSumSquares = points.reduce((sum, p) => {
+                const predicted = regression.slope * p.x + regression.intercept;
+                return sum + Math.pow(p.y - predicted, 2);
+            }, 0);
+            
+            return totalSumSquares > 0 ? (1 - (residualSumSquares / totalSumSquares)) : 0;
+        }
+
+        function calculateStandardError(points, slope) {
+            if (points.length <= 2) return 1;
+            
+            const regression = linearRegression(points);
+            const residuals = points.map(p => {
+                const predicted = regression.slope * p.x + regression.intercept;
+                return p.y - predicted;
+            });
+            
+            const residualSumSquares = residuals.reduce((sum, r) => sum + r * r, 0);
+            const standardError = Math.sqrt(residualSumSquares / (points.length - 2));
+            
+            const xMean = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+            const xVariance = points.reduce((sum, p) => sum + Math.pow(p.x - xMean, 2), 0);
+            
+            return standardError / Math.sqrt(xVariance);
+        }
+
+        function checkSignificance(points, slope) {
+            // Упрощенный t-тест для малых выборок
+            const n = points.length;
+            if (n < 2) return { significant: false, pValue: 1 };
+            
+            const standardError = calculateStandardError(points, slope);
+            if (standardError === 0) return { significant: true, pValue: 0 };
+            
+            const tStatistic = Math.abs(slope) / standardError;
+            
+            // Для n=3, критическое значение t ≈ 4.303 (для α=0.05)
+            const criticalValue = n === 2 ? 12.706 : (n === 3 ? 4.303 : 3.182);
+            const significant = Math.abs(tStatistic) > criticalValue;
+            
+            // Упрощенный расчет p-value
+            const pValue = Math.min(0.5, 1 / (1 + Math.exp(Math.abs(tStatistic) / 2)));
+            
+            return { significant, pValue };
+        }
+
+        function calculateWeightedTrend(periodsData, weights) {
+            if (periodsData.length !== weights.length) return 'нейтральный';
+            
+            let weightedSum = 0;
+            for (let i = 0; i < periodsData.length; i++) {
+                weightedSum += periodsData[i] * weights[i];
+            }
+            
+            const avg = weightedSum / weights.reduce((a, b) => a + b, 0);
+            const simpleAvg = periodsData.reduce((a, b) => a + b, 0) / periodsData.length;
+            
+            return avg > simpleAvg ? 'растущий' : (avg < simpleAvg ? 'снижающийся' : 'нейтральный');
+        }
+
+        function calculateConfidence(slope, r2, n) {
+            // Упрощенный расчет доверительного интервала
+            if (n < 2) return 'не определен';
+            
+            const margin = Math.abs(slope) * (1 - r2) * (n / (n - 1));
+            const lower = slope - margin;
+            const upper = slope + margin;
+            
+            return `[${lower.toFixed(2)}, ${upper.toFixed(2)}]`;
+        }
+
         function updateVisualization() {
             const svg = document.querySelector('.triangle-svg');
             svg.innerHTML = ''; // Очищаем предыдущий рисунок
@@ -885,10 +1050,26 @@
                 }
             }
             
-            // Нормализуем значения для лучшего отображения
-            const values = points.map(p => p.value);
-            const maxValue = Math.max(...values);
-            const minValue = Math.min(...values);
+            // Научный анализ тренда
+            const periodValues = currentMode === 'two' 
+                ? [totalFirstPeriod, totalSecondPeriod] 
+                : [totalFirstPeriod, totalSecondPeriod, totalThirdPeriod];
+                
+            const regressionPoints = periodValues.map((value, index) => ({x: index + 1, y: value}));
+            const regression = linearRegression(regressionPoints);
+            const r2 = calculateR2(regressionPoints, regression);
+            const significance = checkSignificance(regressionPoints, regression.slope);
+            
+            // Взвешенный тренд (более поздние периоды имеют больший вес)
+            const weights = currentMode === 'two' ? [0.4, 0.6] : [0.2, 0.3, 0.5];
+            const weightedTrend = calculateWeightedTrend(periodValues, weights);
+            
+            // Обновляем научные показатели
+            document.getElementById('regressionSlope').textContent = regression.slope.toFixed(3);
+            document.getElementById('regressionR2').textContent = r2.toFixed(3);
+            document.getElementById('weightedTrend').textContent = weightedTrend;
+            document.getElementById('pValue').textContent = significance.pValue.toFixed(3);
+            document.getElementById('confidenceInterval').textContent = calculateConfidence(regression.slope, r2, periodValues.length);
             
             // Рисуем треугольник
             if (points.length >= 3) {
@@ -941,49 +1122,32 @@
                 svg.appendChild(textLabel);
             });
             
-            // Определяем тренд
+            // Определяем тренд на основе научного анализа
             let trendIcon, trendText, trendClass;
             
-            if (currentMode === 'two') {
-                // Для двух периодов сравниваем второй период с первым
-                if (totalSecondPeriod > totalFirstPeriod) {
+            if (significance.significant) {
+                if (regression.slope > 0) {
                     trendIcon = '↗️';
-                    trendText = 'Тренд растет';
+                    trendText = 'Статистически значимый рост';
                     trendClass = 'trend-up';
-                } else if (totalSecondPeriod < totalFirstPeriod) {
-                    trendIcon = '↘️';
-                    trendText = 'Тренд снижается';
-                    trendClass = 'trend-down';
                 } else {
-                    trendIcon = '↔️';
-                    trendText = 'Тренд стабилен';
-                    trendClass = 'trend-stable';
+                    trendIcon = '↘️';
+                    trendText = 'Статистически значимое снижение';
+                    trendClass = 'trend-down';
                 }
             } else {
-                // Для трех периодов анализируем динамику
-                const diff1 = totalSecondPeriod - totalFirstPeriod;
-                const diff2 = totalThirdPeriod - totalSecondPeriod;
-                
-                if (diff2 > 0 && diff2 > diff1) {
-                    trendIcon = '↗️';
-                    trendText = 'Тренд ускоряется вверх';
-                    trendClass = 'trend-up';
-                } else if (diff2 > 0) {
-                    trendIcon = '↗️';
-                    trendText = 'Тренд растет';
-                    trendClass = 'trend-up';
-                } else if (diff2 < 0 && diff2 < diff1) {
-                    trendIcon = '↘️';
-                    trendText = 'Тренд ускоряется вниз';
-                    trendClass = 'trend-down';
-                } else if (diff2 < 0) {
-                    trendIcon = '↘️';
-                    trendText = 'Тренд снижается';
-                    trendClass = 'trend-down';
-                } else {
+                if (Math.abs(regression.slope) < 0.1) {
                     trendIcon = '↔️';
-                    trendText = 'Тренд стабилен';
+                    trendText = 'Тренд статистически не значим';
                     trendClass = 'trend-stable';
+                } else if (regression.slope > 0) {
+                    trendIcon = '↗️';
+                    trendText = 'Слабый рост (не значим)';
+                    trendClass = 'trend-up';
+                } else {
+                    trendIcon = '↘️';
+                    trendText = 'Слабое снижение (не значимо)';
+                    trendClass = 'trend-down';
                 }
             }
             
