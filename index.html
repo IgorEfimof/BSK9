@@ -360,23 +360,27 @@
             transition: width 0.5s ease;
         }
 
-        /* Стили для магического квадрата */
+        /* Обновленные стили для магического квадрата */
         .magic-square-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            padding: 10px;
+            gap: 12px;
+            padding: 12px;
         }
 
         .magic-square {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            gap: 4px;
-            width: 200px;
-            height: 200px;
-            margin: 10px auto;
+            gap: 6px;
+            width: 220px;
+            height: 220px;
+            margin: 12px auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 8px;
+            border: 2px solid var(--primary);
         }
 
         .magic-cell {
@@ -385,18 +389,19 @@
             justify-content: center;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid var(--primary);
-            border-radius: 6px;
-            font-size: 1.2rem;
+            border-radius: 8px;
+            font-size: 1.3rem;
             font-weight: bold;
             color: white;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .magic-cell.active {
             background: var(--primary);
             color: black;
             transform: scale(1.05);
-            box-shadow: 0 0 10px var(--primary);
+            box-shadow: 0 0 12px var(--primary);
         }
 
         .magic-cell.diagonal {
@@ -405,57 +410,214 @@
 
         .magic-cell.diagonal.active {
             background: var(--secondary);
-            box-shadow: 0 0 10px var(--secondary);
+            box-shadow: 0 0 12px var(--secondary);
         }
 
-        .magic-sum {
-            font-size: 1rem;
+        .magic-cell.corner {
+            border-style: double;
+        }
+
+        .magic-cell.center {
+            border-width: 3px;
+        }
+
+        .cell-index {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .magic-calculations {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .calculation-group {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .calculation-group.diagonal {
+            border-left-color: var(--secondary);
+        }
+
+        .calculation-title {
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 6px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .calculation-title.diagonal {
+            color: var(--secondary);
+        }
+
+        .calculation-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            padding: 2px 0;
+        }
+
+        .calculation-value {
             font-weight: bold;
             color: var(--primary);
-            margin-top: 5px;
         }
 
-        .magic-formula {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 8px;
-            border-radius: 6px;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            text-align: center;
-            border-left: 3px solid var(--secondary);
+        .calculation-value.diagonal {
+            color: var(--secondary);
         }
 
-        .magic-explanation {
-            font-size: 0.75rem;
+        .calculation-formula {
+            font-size: 0.7rem;
             color: #bdb2ff;
             text-align: center;
-            margin-top: 5px;
-            line-height: 1.2;
+            margin-top: 4px;
+            font-style: italic;
         }
+
+        .magic-summary {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .summary-title {
+            color: var(--primary);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: #bdb2ff;
+        }
+
+        .summary-value {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .energy-level {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .energy-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .energy-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .energy-low { background: #ef4444; width: 33%; }
+        .energy-medium { background: #f59e0b; width: 66%; }
+        .energy-high { background: #10b981; width: 100%; }
 
         .magic-result {
             text-align: center;
-            font-size: 1rem;
-            padding: 10px;
-            background: rgba(76, 201, 240, 0.2);
-            border-radius: 8px;
+            font-size: 1.1rem;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.2), rgba(247, 37, 133, 0.2));
+            border-radius: 10px;
             border: 2px solid var(--primary);
-            margin-top: 10px;
+            margin-top: 12px;
             font-weight: bold;
+            width: 100%;
+        }
+
+        .prediction-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .breakdown-item {
+            text-align: center;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .breakdown-value {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        .interpretation {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .interpretation-title {
+            color: var(--secondary);
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .interpretation-text {
+            font-size: 0.75rem;
+            line-height: 1.3;
+            text-align: center;
+            color: #bdb2ff;
         }
 
         .magic-legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
             justify-content: center;
-            margin-top: 10px;
+            margin-top: 12px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             font-size: 0.7rem;
         }
 
@@ -463,6 +625,7 @@
             width: 12px;
             height: 12px;
             border-radius: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .legend-primary {
@@ -471,6 +634,11 @@
 
         .legend-secondary {
             background: var(--secondary);
+        }
+
+        .legend-corner {
+            background: transparent;
+            border: 2px double var(--primary);
         }
 
         .keyboard {
@@ -598,8 +766,20 @@
             }
             
             .magic-square {
-                width: 180px;
-                height: 180px;
+                width: 200px;
+                height: 200px;
+            }
+            
+            .magic-cell {
+                font-size: 1.1rem;
+            }
+            
+            .magic-calculations {
+                gap: 8px;
+            }
+            
+            .calculation-group {
+                padding: 8px;
             }
         }
 
@@ -622,12 +802,31 @@
             }
             
             .magic-square {
-                width: 160px;
-                height: 160px;
+                width: 180px;
+                height: 180px;
             }
             
             .magic-cell {
                 font-size: 1rem;
+            }
+            
+            .magic-summary {
+                padding: 8px;
+            }
+            
+            .magic-result {
+                padding: 8px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .magic-calculations {
+                grid-template-columns: 1fr;
+            }
+            
+            .prediction-breakdown {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -755,31 +954,113 @@
             </div>
         </div>
         
-        <!-- Новая вкладка с магическим квадратом -->
         <div class="tab-content" id="magic-tab">
             <div class="magic-square-container">
-                <h2>Магический квадрат Сидика Авгана</h2>
+                <h2>🔮 Магический квадрат Сидика Авгана</h2>
                 
                 <div class="magic-explanation">
-                    Магический квадрат преобразует данные периодов в числовую матрицу для прогнозирования
+                    Трансформация баскетбольных периодов в нумерологическую матрицу для точного прогнозирования
                 </div>
                 
                 <div class="magic-square" id="magicSquare">
                     <!-- Ячейки заполняются JavaScript -->
                 </div>
                 
-                <div class="magic-sum">
-                    Магическая сумма: <span id="magicSum">0</span>
+                <div class="magic-calculations">
+                    <div class="calculation-group">
+                        <div class="calculation-title">📊 Основные суммы</div>
+                        <div class="calculation-item">
+                            <span>Магическая сумма:</span>
+                            <span class="calculation-value" id="magicSumTotal">0</span>
+                        </div>
+                        <div class="calculation-item">
+                            <span>Строка 1:</span>
+                            <span class="calculation-value" id="row1Sum">0</span>
+                        </div>
+                        <div class="calculation-item">
+                            <span>Строка 2:</span>
+                            <span class="calculation-value" id="row2Sum">0</span>
+                        </div>
+                        <div class="calculation-item">
+                            <span>Строка 3:</span>
+                            <span class="calculation-value" id="row3Sum">0</span>
+                        </div>
+                        <div class="calculation-formula">Суммы по строкам</div>
+                    </div>
+                    
+                    <div class="calculation-group diagonal">
+                        <div class="calculation-title diagonal">🎯 Диагонали силы</div>
+                        <div class="calculation-item">
+                            <span>Главная (↘):</span>
+                            <span class="calculation-value diagonal" id="mainDiagonalSum">0</span>
+                        </div>
+                        <div class="calculation-item">
+                            <span>Побочная (↙):</span>
+                            <span class="calculation-value diagonal" id="antiDiagonalSum">0</span>
+                        </div>
+                        <div class="calculation-item">
+                            <span>Баланс:</span>
+                            <span class="calculation-value diagonal" id="diagonalBalance">0</span>
+                        </div>
+                        <div class="calculation-item">
+                            <span>Энергия:</span>
+                            <span class="calculation-value diagonal" id="diagonalEnergy">0</span>
+                        </div>
+                        <div class="calculation-formula">(Гл. + Поб.) / 2</div>
+                    </div>
                 </div>
-                
-                <div class="magic-formula">
-                    Формула: √(ΣP²) × k + Δ
+
+                <div class="magic-summary">
+                    <div class="summary-title">📈 Анализ энергии</div>
+                    <div class="summary-item">
+                        <span class="summary-label">Активные ячейки:</span>
+                        <span class="summary-value" id="activeCells">0/9</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Сила центра:</span>
+                        <span class="summary-value" id="centerPower">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Энергетический уровень:</span>
+                        <span class="summary-value" id="energyLevel">Низкий</span>
+                    </div>
+                    <div class="energy-level">
+                        <span style="font-size: 0.7rem;">Энергия:</span>
+                        <div class="energy-bar">
+                            <div class="energy-fill" id="energyFill"></div>
+                        </div>
+                    </div>
                 </div>
-                
+
+                <div class="interpretation">
+                    <div class="interpretation-title">💡 Интерпретация матрицы</div>
+                    <div class="interpretation-text" id="magicInterpretation">
+                        Введите данные периодов для получения анализа...
+                    </div>
+                </div>
+
                 <div class="magic-result" id="magicResult" style="display:none">
-                    Магический прогноз: <strong><span id="magicPrediction">0</span></strong>
+                    <div>✨ Магический прогноз: <strong><span id="magicPrediction">0</span></strong></div>
+                    <div class="prediction-breakdown">
+                        <div class="breakdown-item">
+                            <div>База</div>
+                            <div class="breakdown-value" id="basePrediction">0</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>Коррекция</div>
+                            <div class="breakdown-value" id="correctionValue">0</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>Энергия</div>
+                            <div class="breakdown-value" id="energyValue">0%</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div>Тренд</div>
+                            <div class="breakdown-value" id="trendValue">1.0x</div>
+                        </div>
+                    </div>
                 </div>
-                
+
                 <div class="magic-legend">
                     <div class="legend-item">
                         <div class="legend-color legend-primary"></div>
@@ -788,6 +1069,10 @@
                     <div class="legend-item">
                         <div class="legend-color legend-secondary"></div>
                         <span>Диагональ силы</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-corner"></div>
+                        <span>Угловые ячейки</span>
                     </div>
                 </div>
             </div>
@@ -1187,7 +1472,7 @@ function calculateRiskLevel(data) {
     return { level: "high", text: "Высокий риск", icon: "🚨" };
 }
 
-// Магический квадрат Сидика Авгана
+// Магический квадрат Сидика Авгана - ОБНОВЛЕННЫЕ ФУНКЦИИ
 function updateMagicSquare() {
     const magicSquare = document.getElementById('magicSquare');
     magicSquare.innerHTML = '';
@@ -1211,10 +1496,21 @@ function updateMagicSquare() {
     for (let i = 0; i < 9; i++) {
         const cell = document.createElement('div');
         cell.className = 'magic-cell';
-        cell.textContent = magicValues[i];
+        cell.innerHTML = `<span class="cell-index">${i+1}</span>${magicValues[i]}`;
         
-        // Определяем диагональные ячейки (0, 4, 8) и (2, 4, 6)
-        if (i === 0 || i === 4 || i === 8 || i === 2 || i === 6) {
+        // Определяем тип ячейки
+        if (i === 0 || i === 2 || i === 6 || i === 8) {
+            cell.classList.add('corner');
+        }
+        if (i === 4) {
+            cell.classList.add('center');
+        }
+        
+        // Определяем диагональные ячейки
+        if (i === 0 || i === 4 || i === 8) { // Главная диагональ
+            cell.classList.add('diagonal');
+        }
+        if (i === 2 || i === 4 || i === 6) { // Побочная диагональ
             cell.classList.add('diagonal');
         }
         
@@ -1226,74 +1522,193 @@ function updateMagicSquare() {
         magicSquare.appendChild(cell);
     }
     
-    // Вычисляем магическую сумму и прогноз
-    const magicSum = calculateMagicSum(magicValues);
-    const magicPrediction = calculateMagicPrediction(magicValues, totalFirstPeriod, totalSecondPeriod, totalThirdPeriod);
+    // Вычисляем все суммы и показатели
+    const calculations = calculateAllMagicValues(magicValues, totalFirstPeriod, totalSecondPeriod, totalThirdPeriod);
     
-    document.getElementById('magicSum').textContent = magicSum;
-    document.getElementById('magicPrediction').textContent = magicPrediction;
-    document.getElementById('magicResult').style.display = 'block';
+    // Обновляем интерфейс
+    updateMagicUI(calculations, magicValues);
 }
 
 function createMagicSquare(p1, p2, p3) {
-    // Базовый магический квадрат
+    // Базовый магический квадрат Ло Шу
     const baseSquare = [4, 9, 2, 3, 5, 7, 8, 1, 6];
     
-    // Адаптируем квадрат под наши данные
+    // Адаптируем квадрат под наши данные с разными коэффициентами
     const adaptedSquare = baseSquare.map((value, index) => {
         let multiplier;
         
-        // Разные коэффициенты для разных позиций
+        // Разные коэффициенты для разных позиций в зависимости от значимости
         switch(index) {
-            case 0: multiplier = p1 / 10; break;
-            case 1: multiplier = p2 / 10; break;
-            case 2: multiplier = p3 / 10; break;
-            case 3: multiplier = (p1 + p2) / 20; break;
-            case 4: multiplier = (p1 + p2 + p3) / 30; break;
-            case 5: multiplier = (p2 + p3) / 20; break;
-            case 6: multiplier = p3 / 10; break;
-            case 7: multiplier = p1 / 10; break;
-            case 8: multiplier = p2 / 10; break;
+            case 0: multiplier = p1 / 15; break; // Левый верх - первый период
+            case 1: multiplier = p2 / 12; break; // Верхний центр - второй период  
+            case 2: multiplier = p3 / 15; break; // Правый верх - третий период
+            case 3: multiplier = (p1 + p2) / 25; break; // Левый центр
+            case 4: multiplier = (p1 + p2 + p3) / 35; break; // Центр - общая энергия
+            case 5: multiplier = (p2 + p3) / 25; break; // Правый центр
+            case 6: multiplier = p3 / 15; break; // Левый низ
+            case 7: multiplier = p1 / 12; break; // Нижний центр
+            case 8: multiplier = p2 / 15; break; // Правый низ
             default: multiplier = 1;
         }
         
-        return Math.round(value * multiplier);
+        return Math.max(0, Math.round(value * multiplier));
     });
     
     return adaptedSquare;
 }
 
-function calculateMagicSum(magicValues) {
-    // Сумма первой строки (традиционная магическая сумма)
-    return magicValues[0] + magicValues[1] + magicValues[2];
+function calculateAllMagicValues(magicValues, p1, p2, p3) {
+    // Суммы строк
+    const row1 = magicValues[0] + magicValues[1] + magicValues[2];
+    const row2 = magicValues[3] + magicValues[4] + magicValues[5]; 
+    const row3 = magicValues[6] + magicValues[7] + magicValues[8];
+    
+    // Суммы диагоналей
+    const mainDiagonal = magicValues[0] + magicValues[4] + magicValues[8];
+    const antiDiagonal = magicValues[2] + magicValues[4] + magicValues[6];
+    
+    // Дополнительные показатели
+    const magicSumTotal = row1; // Традиционно сумма первой строки
+    const diagonalBalance = mainDiagonal - antiDiagonal;
+    const diagonalEnergy = (mainDiagonal + antiDiagonal) / 2;
+    const centerPower = magicValues[4];
+    const activeCells = magicValues.filter(val => val > 0).length;
+    
+    // Расчет энергии
+    const totalEnergy = magicValues.reduce((a, b) => a + b, 0);
+    const maxEnergy = 9 * 15; // Максимальная теоретическая энергия
+    const energyPercent = Math.min(100, Math.round((totalEnergy / maxEnergy) * 100));
+    
+    // Прогноз на основе магического квадрата
+    const prediction = calculateMagicPrediction(magicValues, p1, p2, p3, totalEnergy);
+    
+    return {
+        magicValues,
+        row1, row2, row3,
+        mainDiagonal, antiDiagonal,
+        magicSumTotal,
+        diagonalBalance,
+        diagonalEnergy,
+        centerPower,
+        activeCells,
+        totalEnergy,
+        energyPercent,
+        prediction
+    };
 }
 
-function calculateMagicPrediction(magicValues, p1, p2, p3) {
-    // Усовершенствованный алгоритм прогнозирования на основе магического квадрата
-    const diagonal1 = magicValues[0] + magicValues[4] + magicValues[8]; // Главная диагональ
-    const diagonal2 = magicValues[2] + magicValues[4] + magicValues[6]; // Побочная диагональ
+function calculateMagicPrediction(magicValues, p1, p2, p3, totalEnergy) {
+    const mainDiagonal = magicValues[0] + magicValues[4] + magicValues[8];
+    const antiDiagonal = magicValues[2] + magicValues[4] + magicValues[6];
     
-    const row1 = magicValues[0] + magicValues[1] + magicValues[2]; // Первая строка
-    const row2 = magicValues[3] + magicValues[4] + magicValues[5]; // Вторая строка
-    const row3 = magicValues[6] + magicValues[7] + magicValues[8]; // Третья строка
-    
-    const magicEnergy = (diagonal1 + diagonal2 + row1 + row2 + row3) / 5;
-    
-    // Учитываем динамику периодов
+    const magicEnergy = (mainDiagonal + antiDiagonal) / 2;
     const periodTrend = p3 > p2 ? 1.1 : (p3 < p2 ? 0.9 : 1.0);
     
-    // Финализируем прогноз
-    let prediction;
+    // Базовый расчет в зависимости от режима
+    let basePrediction;
     if (currentMode === 'two') {
-        prediction = (p1 + p2) * 2 * periodTrend;
+        basePrediction = (p1 + p2) * 2;
     } else {
-        prediction = (p1 + p2 + p3) * (4/3) * periodTrend;
+        basePrediction = (p1 + p2 + p3) * (4/3);
     }
     
-    // Корректируем магической энергией
-    prediction = prediction * (1 + (magicEnergy - 15) / 100);
+    // Корректировка магической энергией (чем больше энергия, тем выше тотал)
+    const energyCorrection = 1 + (magicEnergy - 15) / 100;
     
-    return Math.round(prediction);
+    // Корректировка трендом
+    const trendCorrection = periodTrend;
+    
+    // Финальный прогноз
+    const finalPrediction = basePrediction * energyCorrection * trendCorrection;
+    
+    return {
+        final: Math.round(finalPrediction),
+        base: Math.round(basePrediction),
+        energyCorrection: Math.round((energyCorrection - 1) * 100),
+        trendCorrection: periodTrend.toFixed(1) + 'x'
+    };
+}
+
+function updateMagicUI(calculations, magicValues) {
+    // Обновляем основные суммы
+    document.getElementById('magicSumTotal').textContent = calculations.magicSumTotal;
+    document.getElementById('row1Sum').textContent = calculations.row1;
+    document.getElementById('row2Sum').textContent = calculations.row2;
+    document.getElementById('row3Sum').textContent = calculations.row3;
+    
+    // Обновляем диагонали
+    document.getElementById('mainDiagonalSum').textContent = calculations.mainDiagonal;
+    document.getElementById('antiDiagonalSum').textContent = calculations.antiDiagonal;
+    document.getElementById('diagonalBalance').textContent = calculations.diagonalBalance;
+    document.getElementById('diagonalEnergy').textContent = Math.round(calculations.diagonalEnergy);
+    
+    // Обновляем анализ энергии
+    document.getElementById('activeCells').textContent = `${calculations.activeCells}/9`;
+    document.getElementById('centerPower').textContent = calculations.centerPower;
+    
+    // Обновляем уровень энергии
+    const energyLevel = calculations.energyPercent < 33 ? 'Низкий' : 
+                       calculations.energyPercent < 66 ? 'Средний' : 'Высокий';
+    document.getElementById('energyLevel').textContent = energyLevel;
+    
+    const energyFill = document.getElementById('energyFill');
+    energyFill.className = 'energy-fill ' + 
+        (calculations.energyPercent < 33 ? 'energy-low' : 
+         calculations.energyPercent < 66 ? 'energy-medium' : 'energy-high');
+    energyFill.style.width = calculations.energyPercent + '%';
+    
+    // Обновляем прогноз
+    document.getElementById('magicPrediction').textContent = calculations.prediction.final;
+    document.getElementById('basePrediction').textContent = calculations.prediction.base;
+    document.getElementById('correctionValue').textContent = calculations.prediction.energyCorrection + '%';
+    document.getElementById('energyValue').textContent = calculations.energyPercent + '%';
+    document.getElementById('trendValue').textContent = calculations.prediction.trendCorrection;
+    document.getElementById('magicResult').style.display = 'block';
+    
+    // Обновляем интерпретацию
+    updateMagicInterpretation(calculations);
+}
+
+function updateMagicInterpretation(calculations) {
+    let interpretation = "";
+    
+    // Анализ энергии
+    if (calculations.energyPercent < 25) {
+        interpretation += "🌀 <strong>Низкая энергия</strong> - слабая взаимосвязь данных. ";
+    } else if (calculations.energyPercent < 50) {
+        interpretation += "💫 <strong>Умеренная энергия</strong> - стабильные показатели. ";
+    } else if (calculations.energyPercent < 75) {
+        interpretation += "⚡ <strong>Высокая энергия</strong> - сильная динамика. ";
+    } else {
+        interpretation += "🌪️ <strong>Мощная энергия</strong> - исключительная взаимосвязь! ";
+    }
+    
+    // Анализ диагоналей
+    if (calculations.diagonalBalance > 10) {
+        interpretation += "Преобладает <strong>главная диагональ</strong> - устойчивый тренд. ";
+    } else if (calculations.diagonalBalance < -10) {
+        interpretation += "Доминирует <strong>побочная диагональ</strong> - высокая волатильность. ";
+    } else {
+        interpretation += "<strong>Баланс диагоналей</strong> - сбалансированная динамика. ";
+    }
+    
+    // Анализ активных ячеек
+    if (calculations.activeCells < 4) {
+        interpretation += "Мало активных элементов - консервативный прогноз. ";
+    } else if (calculations.activeCells < 7) {
+        interpretation += "Умеренная активность - стандартная динамика. ";
+    } else {
+        interpretation += "Высокая активность - экспрессивная игра! ";
+    }
+    
+    // Анализ центра
+    if (calculations.centerPower > 10) {
+        interpretation += "Сильный центр обеспечивает стабильность. ";
+    } else if (calculations.centerPower < 5) {
+        interpretation += "Слабый центр указывает на неопределенность. ";
+    }
+    
+    document.getElementById('magicInterpretation').innerHTML = interpretation;
 }
 
 // Визуализация и обновление данных
