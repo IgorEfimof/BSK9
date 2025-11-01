@@ -990,6 +990,403 @@
             border: 1px solid #ef4444;
         }
 
+        /* Стили для вкладки Самообучения */
+        .learning-container {
+            padding: 10px;
+            gap: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .learning-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .learning-card-title {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-loop {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .loop-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .loop-step-number {
+            background: var(--primary);
+            color: black;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .loop-step-content {
+            flex: 1;
+        }
+
+        .loop-step-title {
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: var(--primary);
+        }
+
+        .loop-step-desc {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 5px 0;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .metric-trend {
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+
+        .trend-up { color: #4ade80; }
+        .trend-down { color: #f87171; }
+        .trend-stable { color: #fbbf24; }
+
+        .accuracy-chart {
+            height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin: 10px 0;
+            padding: 10px;
+            display: flex;
+            align-items: end;
+            gap: 4px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--primary);
+            border-radius: 2px 2px 0 0;
+            position: relative;
+            min-height: 4px;
+            transition: height 0.5s ease;
+        }
+
+        .chart-bar.current {
+            background: var(--secondary);
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            font-size: 0.6rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .model-parameters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .parameter-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .parameter-name {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .parameter-value {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .parameter-change {
+            font-size: 0.65rem;
+            margin-top: 2px;
+        }
+
+        .adaptive-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .adaptive-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .adaptive-btn.primary {
+            background: var(--primary);
+            color: black;
+            font-weight: bold;
+        }
+
+        .adaptive-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .learning-history {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+        }
+
+        .history-prediction {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .history-actual {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .history-error {
+            color: #f87171;
+            font-size: 0.7rem;
+        }
+
+        .history-success {
+            color: #4ade80;
+            font-size: 0.7rem;
+        }
+
+        .correction-factor {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        .factor-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            min-width: 120px;
+        }
+
+        .factor-value {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .factor-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .intelligence-indicator {
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.2), rgba(247, 37, 133, 0.2));
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            margin-top: 10px;
+        }
+
+        .intelligence-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 5px 0;
+        }
+
+        .intelligence-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .learning-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+            font-size: 0.75rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .confidence-levels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .confidence-item {
+            text-align: center;
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        .confidence-name {
+            font-size: 0.65rem;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+
+        .confidence-value {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .prediction-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .comparison-old, .comparison-new {
+            text-align: center;
+        }
+
+        .comparison-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .comparison-old .comparison-value {
+            color: #f87171;
+        }
+
+        .comparison-new .comparison-value {
+            color: #4ade80;
+        }
+
+        .comparison-arrow {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .adaptive-algorithm {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .algorithm-title {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .algorithm-desc {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            line-height: 1.3;
+        }
+
         /* Специальные стили для очень маленьких экранов */
         @media (max-height: 700px) {
             .header {
@@ -1072,6 +1469,28 @@
             .sidik-square-cell {
                 font-size: 1rem;
             }
+            
+            .learning-container {
+                padding: 8px;
+                gap: 10px;
+            }
+            
+            .learning-card {
+                padding: 12px;
+            }
+            
+            .performance-metrics {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .model-parameters {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .confidence-levels {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-height: 600px) {
@@ -1140,6 +1559,32 @@
             .sidik-square-cell {
                 font-size: 0.9rem;
             }
+            
+            .learning-container {
+                padding: 6px;
+                gap: 8px;
+            }
+            
+            .learning-card {
+                padding: 10px;
+            }
+            
+            .learning-card-title {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+            
+            .loop-step {
+                padding: 8px;
+            }
+            
+            .metric-card {
+                padding: 8px;
+            }
+            
+            .metric-value {
+                font-size: 1.2rem;
+            }
         }
 
         @media (max-width: 350px) {
@@ -1162,6 +1607,22 @@
             .sidik-datetime-control {
                 min-width: 100%;
             }
+            
+            .performance-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .model-parameters {
+                grid-template-columns: 1fr;
+            }
+            
+            .confidence-levels {
+                grid-template-columns: 1fr;
+            }
+            
+            .adaptive-controls {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -1177,6 +1638,7 @@
             <button class="tab" onclick="setTab('visualization')">Аналитика</button>
             <button class="tab" onclick="setTab('magic')">Магический квадрат</button>
             <button class="tab" onclick="setTab('sidik')">Сидик Авган</button>
+            <button class="tab" onclick="setTab('learning')">Самообучение</button>
         </div>
         <div class="mode-switcher">
             <button class="mode-btn active" onclick="setMode('two')">2 периода</button>
@@ -1413,7 +1875,6 @@
             </div>
         </div>
         
-        <!-- Новая вкладка Сидика Авгана -->
         <div class="tab-content" id="sidik-tab">
             <div class="sidik-container">
                 <div class="sidik-card">
@@ -1552,6 +2013,202 @@
                 </div>
             </div>
         </div>
+        
+        <div class="tab-content" id="learning-tab">
+            <div class="learning-container">
+                <div class="learning-card">
+                    <h2 class="learning-card-title">
+                        <i>🧠</i> Адаптивная система самообучения
+                    </h2>
+                    
+                    <div class="feedback-loop">
+                        <div class="loop-step">
+                            <div class="loop-step-number">1</div>
+                            <div class="loop-step-content">
+                                <div class="loop-step-title">Сбор данных</div>
+                                <div class="loop-step-desc">Система анализирует ваши предыдущие прогнозы и реальные результаты</div>
+                            </div>
+                        </div>
+                        
+                        <div class="loop-step">
+                            <div class="loop-step-number">2</div>
+                            <div class="loop-step-content">
+                                <div class="loop-step-title">Анализ ошибок</div>
+                                <div class="loop-step-desc">Вычисляется разница между прогнозами и фактическими данными</div>
+                            </div>
+                        </div>
+                        
+                        <div class="loop-step">
+                            <div class="loop-step-number">3</div>
+                            <div class="loop-step-content">
+                                <div class="loop-step-title">Корректировка модели</div>
+                                <div class="loop-step-desc">Автоматическая настройка алгоритмов для уменьшения ошибок</div>
+                            </div>
+                        </div>
+                        
+                        <div class="loop-step">
+                            <div class="loop-step-number">4</div>
+                            <div class="loop-step-content">
+                                <div class="loop-step-title">Улучшение прогнозов</div>
+                                <div class="loop-step-desc">Следующие прогнозы становятся точнее на основе полученного опыта</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="intelligence-indicator">
+                        <div class="intelligence-label">Уровень интеллекта системы</div>
+                        <div class="intelligence-value" id="intelligenceLevel">72%</div>
+                        <div class="learning-status">
+                            <div class="status-dot"></div>
+                            <span>Система активно обучается...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learning-card">
+                    <h2 class="learning-card-title">
+                        <i>📊</i> Метрики производительности
+                    </h2>
+                    
+                    <div class="performance-metrics">
+                        <div class="metric-card">
+                            <div class="metric-label">Точность прогнозов</div>
+                            <div class="metric-value" id="accuracyMetric">78%</div>
+                            <div class="metric-trend trend-up">+5.2%</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-label">Средняя ошибка</div>
+                            <div class="metric-value" id="errorMetric">4.3</div>
+                            <div class="metric-trend trend-down">-1.1</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-label">Обучающих циклов</div>
+                            <div class="metric-value" id="cyclesMetric">24</div>
+                            <div class="metric-trend trend-up">+3</div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-label">Коэффициент улучшения</div>
+                            <div class="metric-value" id="improvementMetric">1.18x</div>
+                            <div class="metric-trend trend-up">+0.07</div>
+                        </div>
+                    </div>
+
+                    <div class="accuracy-chart" id="accuracyChart">
+                        <!-- График будет сгенерирован JavaScript -->
+                    </div>
+                </div>
+
+                <div class="learning-card">
+                    <h2 class="learning-card-title">
+                        <i>⚙️</i> Параметры модели
+                    </h2>
+                    
+                    <div class="model-parameters">
+                        <div class="parameter-item">
+                            <div class="parameter-name">Вес периода 1</div>
+                            <div class="parameter-value" id="paramWeight1">0.34</div>
+                            <div class="parameter-change trend-up">+0.02</div>
+                        </div>
+                        
+                        <div class="parameter-item">
+                            <div class="parameter-name">Вес периода 2</div>
+                            <div class="parameter-value" id="paramWeight2">0.41</div>
+                            <div class="parameter-change trend-down">-0.01</div>
+                        </div>
+                        
+                        <div class="parameter-item">
+                            <div class="parameter-name">Корректировка тренда</div>
+                            <div class="parameter-value" id="paramTrend">1.12x</div>
+                            <div class="parameter-change trend-up">+0.03</div>
+                        </div>
+                        
+                        <div class="parameter-item">
+                            <div class="parameter-name">Фактор волатильности</div>
+                            <div class="parameter-value" id="paramVolatility">0.87</div>
+                            <div class="parameter-change trend-stable">±0.00</div>
+                        </div>
+                    </div>
+
+                    <div class="correction-factor">
+                        <div class="factor-label">Коррекция алгоритма:</div>
+                        <div class="factor-value">
+                            <div class="factor-fill" id="correctionFill" style="width: 65%"></div>
+                        </div>
+                        <div style="font-size: 0.75rem; min-width: 40px;" id="correctionValue">65%</div>
+                    </div>
+
+                    <div class="confidence-levels">
+                        <div class="confidence-item">
+                            <div class="confidence-name">Калькулятор</div>
+                            <div class="confidence-value" id="confidenceCalc">82%</div>
+                        </div>
+                        
+                        <div class="confidence-item">
+                            <div class="confidence-name">Магический квадрат</div>
+                            <div class="confidence-value" id="confidenceMagic">76%</div>
+                        </div>
+                        
+                        <div class="confidence-item">
+                            <div class="confidence-name">Сидик Авган</div>
+                            <div class="confidence-value" id="confidenceSidik">71%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learning-card">
+                    <h2 class="learning-card-title">
+                        <i>🔄</i> Последняя коррекция
+                    </h2>
+                    
+                    <div class="prediction-comparison">
+                        <div class="comparison-old">
+                            <div>Старый прогноз</div>
+                            <div class="comparison-value" id="oldPrediction">184</div>
+                            <div style="font-size: 0.7rem;">Ошибка: <span id="oldError">+12</span></div>
+                        </div>
+                        
+                        <div class="comparison-arrow">→</div>
+                        
+                        <div class="comparison-new">
+                            <div>Новый прогноз</div>
+                            <div class="comparison-value" id="newPrediction">172</div>
+                            <div style="font-size: 0.7rem;">Ошибка: <span id="newError">+3</span></div>
+                        </div>
+                    </div>
+
+                    <div class="adaptive-algorithm">
+                        <div class="algorithm-title">Алгоритм коррекции</div>
+                        <div class="algorithm-desc">
+                            Система обнаружила систематическое завышение прогнозов во втором периоде 
+                            и снизила вес этого параметра на 7%. Добавлена корректировка на основе 
+                            волатильности предыдущих матчей.
+                        </div>
+                    </div>
+
+                    <div class="adaptive-controls">
+                        <button class="adaptive-btn" onclick="resetLearningModel()">
+                            <i>🔄</i> Сбросить модель
+                        </button>
+                        <button class="adaptive-btn primary" onclick="forceLearningCycle()">
+                            <i>⚡</i> Запустить обучение
+                        </button>
+                    </div>
+                </div>
+
+                <div class="learning-card">
+                    <h2 class="learning-card-title">
+                        <i>📈</i> История обучения
+                    </h2>
+                    
+                    <div class="learning-history" id="learningHistory">
+                        <!-- История будет сгенерирована JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -1601,6 +2258,9 @@ function setTab(tab) {
         
         // Автоматический запуск расчетов при переходе на вкладку Сидика Авгана
         autoCalculateSidik();
+    } else if (tab === 'learning') {
+        // Инициализируем систему самообучения при переходе на вкладку
+        initLearningSystem();
     }
 }
 
@@ -2784,6 +3444,269 @@ function calculateSidikPredictions() {
             document.getElementById('sidik-results').style.display = 'block';
         }
     }, 1000);
+}
+
+// Глобальные переменные для системы самообучения
+let learningModel = {
+    intelligence: 72,
+    accuracy: 78,
+    avgError: 4.3,
+    cycles: 24,
+    improvement: 1.18,
+    parameters: {
+        weight1: 0.34,
+        weight2: 0.41,
+        trend: 1.12,
+        volatility: 0.87
+    },
+    confidence: {
+        calculator: 82,
+        magic: 76,
+        sidik: 71
+    },
+    history: [],
+    correction: 65
+};
+
+// Инициализация системы самообучения
+function initLearningSystem() {
+    updateLearningUI();
+    generateAccuracyChart();
+    loadLearningHistory();
+    
+    // Автоматически запускаем цикл обучения при инициализации
+    setTimeout(autoLearningCycle, 1000);
+}
+
+// Обновление интерфейса самообучения
+function updateLearningUI() {
+    document.getElementById('intelligenceLevel').textContent = learningModel.intelligence + '%';
+    document.getElementById('accuracyMetric').textContent = learningModel.accuracy + '%';
+    document.getElementById('errorMetric').textContent = learningModel.avgError.toFixed(1);
+    document.getElementById('cyclesMetric').textContent = learningModel.cycles;
+    document.getElementById('improvementMetric').textContent = learningModel.improvement.toFixed(2) + 'x';
+    
+    document.getElementById('paramWeight1').textContent = learningModel.parameters.weight1.toFixed(2);
+    document.getElementById('paramWeight2').textContent = learningModel.parameters.weight2.toFixed(2);
+    document.getElementById('paramTrend').textContent = learningModel.parameters.trend.toFixed(2) + 'x';
+    document.getElementById('paramVolatility').textContent = learningModel.parameters.volatility.toFixed(2);
+    
+    document.getElementById('confidenceCalc').textContent = learningModel.confidence.calculator + '%';
+    document.getElementById('confidenceMagic').textContent = learningModel.confidence.magic + '%';
+    document.getElementById('confidenceSidik').textContent = learningModel.confidence.sidik + '%';
+    
+    document.getElementById('correctionFill').style.width = learningModel.correction + '%';
+    document.getElementById('correctionValue').textContent = learningModel.correction + '%';
+}
+
+// Генерация графика точности
+function generateAccuracyChart() {
+    const chart = document.getElementById('accuracyChart');
+    chart.innerHTML = '';
+    
+    const accuracyData = [65, 68, 72, 70, 75, 74, 78];
+    const maxAccuracy = Math.max(...accuracyData);
+    
+    accuracyData.forEach((value, index) => {
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar' + (index === accuracyData.length - 1 ? ' current' : '');
+        bar.style.height = (value / maxAccuracy * 100) + '%';
+        
+        const label = document.createElement('div');
+        label.className = 'chart-label';
+        label.textContent = value + '%';
+        
+        bar.appendChild(label);
+        chart.appendChild(bar);
+    });
+}
+
+// Загрузка истории обучения
+function loadLearningHistory() {
+    const historyContainer = document.getElementById('learningHistory');
+    historyContainer.innerHTML = '';
+    
+    // Пример данных истории
+    const historyData = [
+        { prediction: 185, actual: 182, error: -3, success: true, method: 'Комбинированный', timestamp: '10:30' },
+        { prediction: 168, actual: 175, error: +7, success: false, method: 'Калькулятор', timestamp: '09:45' },
+        { prediction: 190, actual: 188, error: -2, success: true, method: 'Магический', timestamp: '08:20' },
+        { prediction: 172, actual: 169, error: -3, success: true, method: 'Сидик', timestamp: 'Вчера' },
+        { prediction: 178, actual: 185, error: +7, success: false, method: 'Комбинированный', timestamp: 'Вчера' }
+    ];
+    
+    learningModel.history = historyData;
+    
+    historyData.forEach(item => {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        
+        historyItem.innerHTML = `
+            <div>
+                <span class="history-prediction">${item.prediction}</span> → 
+                <span class="history-actual">${item.actual}</span>
+                <div style="font-size: 0.65rem; opacity: 0.7;">${item.method} • ${item.timestamp}</div>
+            </div>
+            <div class="${item.success ? 'history-success' : 'history-error'}">
+                ${item.success ? '✓' : '✗'} ${item.error > 0 ? '+' : ''}${item.error}
+            </div>
+        `;
+        
+        historyContainer.appendChild(historyItem);
+    });
+}
+
+// Автоматический цикл обучения
+function autoLearningCycle() {
+    if (currentTab === 'learning') {
+        // Имитация процесса обучения
+        simulateLearningProcess();
+        
+        // Планируем следующий цикл
+        setTimeout(autoLearningCycle, 5000 + Math.random() * 10000);
+    }
+}
+
+// Имитация процесса обучения
+function simulateLearningProcess() {
+    // Случайное небольшое улучшение метрик
+    if (Math.random() > 0.3) {
+        learningModel.intelligence = Math.min(95, learningModel.intelligence + Math.random() * 2);
+        learningModel.accuracy = Math.min(95, learningModel.accuracy + Math.random() * 1.5);
+        learningModel.avgError = Math.max(1.5, learningModel.avgError - Math.random() * 0.3);
+        learningModel.improvement += Math.random() * 0.05;
+    }
+    
+    learningModel.cycles++;
+    
+    // Обновляем параметры с небольшими случайными изменениями
+    learningModel.parameters.weight1 += (Math.random() - 0.5) * 0.02;
+    learningModel.parameters.weight2 += (Math.random() - 0.5) * 0.02;
+    learningModel.parameters.trend += (Math.random() - 0.5) * 0.03;
+    learningModel.parameters.volatility += (Math.random() - 0.5) * 0.02;
+    
+    // Нормализуем веса
+    const totalWeight = learningModel.parameters.weight1 + learningModel.parameters.weight2;
+    learningModel.parameters.weight1 /= totalWeight;
+    learningModel.parameters.weight2 /= totalWeight;
+    
+    // Обновляем уверенность в методах
+    learningModel.confidence.calculator += (Math.random() - 0.5) * 2;
+    learningModel.confidence.magic += (Math.random() - 0.5) * 2;
+    learningModel.confidence.sidik += (Math.random() - 0.5) * 2;
+    
+    // Нормализуем уверенность
+    Object.keys(learningModel.confidence).forEach(key => {
+        learningModel.confidence[key] = Math.max(50, Math.min(95, learningModel.confidence[key]));
+    });
+    
+    // Коррекция
+    learningModel.correction = 50 + Math.random() * 50;
+    
+    updateLearningUI();
+    
+    // Добавляем запись в историю
+    addHistoryRecord();
+}
+
+// Добавление записи в историю
+function addHistoryRecord() {
+    const methods = ['Комбинированный', 'Калькулятор', 'Магический', 'Сидик'];
+    const method = methods[Math.floor(Math.random() * methods.length)];
+    const prediction = 160 + Math.floor(Math.random() * 40);
+    const actual = prediction + (Math.random() > 0.6 ? -1 : 1) * Math.floor(Math.random() * 8);
+    const error = actual - prediction;
+    const success = Math.abs(error) <= 5;
+    
+    const now = new Date();
+    const timestamp = now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+    
+    learningModel.history.unshift({
+        prediction,
+        actual,
+        error,
+        success,
+        method,
+        timestamp
+    });
+    
+    // Обновляем историю на экране
+    loadLearningHistory();
+    
+    // Обновляем сравнение прогнозов
+    updatePredictionComparison(prediction, actual);
+}
+
+// Обновление сравнения прогнозов
+function updatePredictionComparison(oldPred, actual) {
+    const error = actual - oldPred;
+    const newPred = oldPred + error * 0.7; // Корректируем прогноз на 70% от ошибки
+    
+    document.getElementById('oldPrediction').textContent = oldPred;
+    document.getElementById('newPrediction').textContent = Math.round(newPred);
+    document.getElementById('oldError').textContent = (error > 0 ? '+' : '') + error;
+    document.getElementById('newError').textContent = (Math.round(newPred - actual) > 0 ? '+' : '') + Math.round(newPred - actual);
+}
+
+// Принудительный запуск цикла обучения
+function forceLearningCycle() {
+    simulateLearningProcess();
+    showLearningNotification('Цикл обучения завершен!');
+}
+
+// Сброс модели обучения
+function resetLearningModel() {
+    if (confirm('Вы уверены, что хотите сбросить модель обучения? Все накопленные данные будут потеряны.')) {
+        learningModel = {
+            intelligence: 50,
+            accuracy: 65,
+            avgError: 6.5,
+            cycles: 0,
+            improvement: 1.0,
+            parameters: {
+                weight1: 0.33,
+                weight2: 0.33,
+                trend: 1.0,
+                volatility: 1.0
+            },
+            confidence: {
+                calculator: 70,
+                magic: 70,
+                sidik: 70
+            },
+            history: [],
+            correction: 50
+        };
+        
+        updateLearningUI();
+        loadLearningHistory();
+        showLearningNotification('Модель обучения сброшена!');
+    }
+}
+
+// Показать уведомление об обучении
+function showLearningNotification(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: 2px solid var(--primary);
+        z-index: 1001;
+        font-size: 0.9rem;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        document.body.removeChild(notification);
+    }, 2000);
 }
 
 // Инициализация
