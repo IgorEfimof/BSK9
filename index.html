@@ -1041,6 +1041,8 @@
             padding: 6px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 6px;
+            position: relative;
+            transition: all 0.3s ease;
         }
 
         .prediction-method {
@@ -1408,6 +1410,80 @@
             line-height: 1.3;
         }
 
+        /* Новые стили для индикаторов отклонений */
+        .deviation-indicators {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .deviation-indicator {
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .deviation-indicator.active {
+            border-color: var(--primary);
+            background: rgba(76, 201, 240, 0.1);
+        }
+
+        .deviation-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .deviation-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+
+        .deviation-value {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .deviation-description {
+            font-size: 0.65rem;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        /* Дополнительные стили для системы самообучения */
+        .data-source-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 0.7rem;
+        }
+
+        .source-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .source-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .source-calc-color { background: var(--secondary); }
+        .source-magic-color { background: var(--primary); }
+        .source-sidik-color { background: #ffc107; }
+
         /* Специальные стили для очень маленьких экранов */
         @media (max-height: 700px) {
             .header {
@@ -1647,6 +1723,10 @@
             }
             
             .predictions-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .deviation-indicators {
                 grid-template-columns: 1fr;
             }
         }
@@ -2049,6 +2129,22 @@
                     
                     <div class="current-predictions">
                         <h4>Текущие прогнозы:</h4>
+                        
+                        <div class="data-source-info">
+                            <div class="source-indicator">
+                                <div class="source-color source-calc-color"></div>
+                                <span>Калькулятор: Доп. расчет (3п) / Основной (2п)</span>
+                            </div>
+                            <div class="source-indicator">
+                                <div class="source-color source-magic-color"></div>
+                                <span>Магический: Базовый прогноз</span>
+                            </div>
+                            <div class="source-indicator">
+                                <div class="source-color source-sidik-color"></div>
+                                <span>Сидик: Общий тотал</span>
+                            </div>
+                        </div>
+                        
                         <div class="predictions-list" id="currentPredictionsList">
                             <div class="prediction-item">
                                 <div class="prediction-method">Калькулятор</div>
@@ -2068,6 +2164,22 @@
                             <div>Комбинированный прогноз:</div>
                             <div class="combined-value" id="combinedPrediction">-</div>
                             <div style="font-size: 0.7rem;">На основе весов обучения</div>
+                        </div>
+
+                        <!-- Новые индикаторы отклонений -->
+                        <div class="deviation-indicators">
+                            <div class="deviation-indicator" id="fastDeviationIndicator">
+                                <div class="deviation-icon">⚡</div>
+                                <div class="deviation-label">Быстрая</div>
+                                <div class="deviation-value" id="fastDeviationValue">-</div>
+                                <div class="deviation-description">От предыдущего матча</div>
+                            </div>
+                            <div class="deviation-indicator" id="slowDeviationIndicator">
+                                <div class="deviation-icon">🐢</div>
+                                <div class="deviation-label">Медленная</div>
+                                <div class="deviation-value" id="slowDeviationValue">-</div>
+                                <div class="deviation-description">Среднее по всем матчам</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -2219,7 +2331,10 @@ let learningSystem = {
         accuracy: { calculator: 0, magic: 0, sidik: 0, combined: 0 },
         totalMatches: 0,
         avgError: 0,
-        efficiency: 0
+        efficiency: 0,
+        // Новые свойства для отклонений
+        fastDeviation: 0,    // Отклонение от предыдущего матча
+        slowDeviation: 0     // Среднее отклонение по всем матчам
     },
     currentPredictions: {
         calculator: null,
@@ -2231,6 +2346,138 @@ let learningSystem = {
     }
 };
 
+// Обновление текущих прогнозов в системе самообучения
+function updateCurrentPredictions() {
+    let calculatorPred, magicPred, sidikPred;
+
+    // Берем данные из калькулятора (доп. расчет для 3 периодов, основной для 2 периодов)
+    if (currentMode === 'three') {
+        const additionalElem = document.getElementById('additionalValue');
+        if (additionalElem && additionalElem.textContent !== '0' && additionalElem.style.display !== 'none') {
+            calculatorPred = parseInt(additionalElem.textContent);
+        } else {
+            calculatorPred = parseInt(document.getElementById('totalValue').textContent);
+        }
+    } else {
+        calculatorPred = parseInt(document.getElementById('totalValue').textContent);
+    }
+
+    // Берем данные из магического квадрата (базовый прогноз)
+    const basePredElem = document.getElementById('basePrediction');
+    if (basePredElem && basePredElem.textContent !== '0') {
+        magicPred = parseInt(basePredElem.textContent);
+    } else {
+        magicPred = null;
+    }
+
+    // Берем данные из Сидика Авгана (общий тотал)
+    const sidikTotalElem = document.getElementById('sidik-totalResult');
+    if (sidikTotalElem && sidikTotalElem.textContent !== '-') {
+        sidikPred = parseInt(sidikTotalElem.textContent);
+    } else {
+        sidikPred = null;
+    }
+
+    learningSystem.currentPredictions = {
+        calculator: calculatorPred !== 0 ? calculatorPred : null,
+        magic: magicPred !== 0 ? magicPred : null,
+        sidik: sidikPred !== 0 ? sidikPred : null,
+        timestamp: new Date().toISOString(),
+        inputData: getCurrentInputData()
+    };
+    
+    // Рассчитываем комбинированный прогноз
+    calculateCombinedPrediction();
+    
+    // Обновляем UI
+    updateCurrentPredictionsUI();
+}
+
+// Расчет комбинированного прогноза с учетом доступных данных
+function calculateCombinedPrediction() {
+    const pred = learningSystem.currentPredictions;
+    const weights = learningSystem.model.weights;
+    
+    let totalWeight = 0;
+    let weightedSum = 0;
+    
+    if (pred.calculator && !isNaN(pred.calculator)) {
+        weightedSum += pred.calculator * weights.calculator;
+        totalWeight += weights.calculator;
+    }
+    
+    if (pred.magic && !isNaN(pred.magic)) {
+        weightedSum += pred.magic * weights.magic;
+        totalWeight += weights.magic;
+    }
+    
+    if (pred.sidik && !isNaN(pred.sidik)) {
+        weightedSum += pred.sidik * weights.sidik;
+        totalWeight += weights.sidik;
+    }
+    
+    if (totalWeight > 0) {
+        pred.combined = Math.round(weightedSum / totalWeight);
+    } else {
+        pred.combined = null;
+    }
+}
+
+// Обновление UI текущих прогнозов
+function updateCurrentPredictionsUI() {
+    const pred = learningSystem.currentPredictions;
+    
+    document.getElementById('currentCalcPred').textContent = pred.calculator || '-';
+    document.getElementById('currentMagicPred').textContent = pred.magic || '-';
+    document.getElementById('currentSidikPred').textContent = pred.sidik || '-';
+    document.getElementById('combinedPrediction').textContent = pred.combined || '-';
+    
+    // Добавляем визуальные индикаторы источников данных
+    updatePredictionSourceIndicators();
+}
+
+// Визуальные индикаторы источников данных
+function updatePredictionSourceIndicators() {
+    const pred = learningSystem.currentPredictions;
+    
+    const indicators = {
+        calc: document.getElementById('currentCalcPred'),
+        magic: document.getElementById('currentMagicPred'),
+        sidik: document.getElementById('currentSidikPred')
+    };
+    
+    // Сбрасываем стили
+    Object.values(indicators).forEach(indicator => {
+        indicator.style.background = 'transparent';
+        indicator.style.border = 'none';
+        indicator.style.borderRadius = '0';
+    });
+    
+    // Устанавливаем стили в зависимости от режима и доступности данных
+    if (currentMode === 'three') {
+        // В режиме 3 периодов подсвечиваем дополнительный расчет
+        if (document.getElementById('additionalResult').style.display !== 'none') {
+            indicators.calc.style.background = 'rgba(247, 37, 133, 0.2)';
+            indicators.calc.style.border = '1px solid var(--secondary)';
+            indicators.calc.style.borderRadius = '4px';
+        }
+    }
+    
+    // Магический квадрат всегда использует базовый прогноз
+    if (pred.magic) {
+        indicators.magic.style.background = 'rgba(76, 201, 240, 0.2)';
+        indicators.magic.style.border = '1px solid var(--primary)';
+        indicators.magic.style.borderRadius = '4px';
+    }
+    
+    // Сидик Авган всегда использует общий тотал
+    if (pred.sidik) {
+        indicators.sidik.style.background = 'rgba(255, 193, 7, 0.2)';
+        indicators.sidik.style.border = '1px solid #ffc107';
+        indicators.sidik.style.borderRadius = '4px';
+    }
+}
+
 // Инициализация системы самообучения
 function initLearningSystem() {
     loadLearningData();
@@ -2238,6 +2485,8 @@ function initLearningSystem() {
     updateLearningUI();
     generateAccuracyChart();
     loadMatchHistory();
+    updatePredictionSourceIndicators();
+    updateDeviationIndicators();
 }
 
 // Загрузка данных обучения
@@ -2258,27 +2507,6 @@ function saveLearningData() {
     localStorage.setItem('learningSystem', JSON.stringify(learningSystem));
 }
 
-// Обновление текущих прогнозов
-function updateCurrentPredictions() {
-    const calculatorPred = document.getElementById('totalValue').textContent;
-    const magicPred = document.getElementById('magicPrediction').textContent;
-    const sidikPred = document.getElementById('sidik-totalResult').textContent;
-    
-    learningSystem.currentPredictions = {
-        calculator: calculatorPred !== '0' ? parseInt(calculatorPred) : null,
-        magic: magicPred !== '0' ? parseInt(magicPred) : null,
-        sidik: sidikPred !== '-' ? parseInt(sidikPred) : null,
-        timestamp: new Date().toISOString(),
-        inputData: getCurrentInputData()
-    };
-    
-    // Рассчитываем комбинированный прогноз
-    calculateCombinedPrediction();
-    
-    // Обновляем UI
-    updateCurrentPredictionsUI();
-}
-
 // Получение текущих входных данных
 function getCurrentInputData() {
     const team1p1 = parseInt(document.getElementById('team1-period1').value) || 0;
@@ -2295,24 +2523,6 @@ function getCurrentInputData() {
         totalSecondPeriod: team1p2 + team2p2,
         totalThirdPeriod: team1p3 + team2p3
     };
-}
-
-// Расчет комбинированного прогноза
-function calculateCombinedPrediction() {
-    const pred = learningSystem.currentPredictions;
-    const weights = learningSystem.model.weights;
-    
-    if (!pred.calculator || !pred.magic || !pred.sidik) {
-        pred.combined = null;
-        return;
-    }
-    
-    const combined = 
-        pred.calculator * weights.calculator +
-        pred.magic * weights.magic + 
-        pred.sidik * weights.sidik;
-    
-    pred.combined = Math.round(combined);
 }
 
 // Сохранение реального результата
@@ -2337,17 +2547,102 @@ function saveActualResult() {
     // Пересчитываем модель
     updateLearningModel();
     
+    // Обновляем отклонения
+    updateDeviations();
+    
     // Сохраняем данные
     saveLearningData();
     
     // Обновляем UI
     updateLearningUI();
     loadMatchHistory();
+    updateDeviationIndicators();
     
     // Очищаем поле ввода
     document.getElementById('actualTotal').value = '';
     
     showLearningNotification('Результат сохранен! Модель обновлена.');
+}
+
+// Обновление отклонений
+function updateDeviations() {
+    const matches = learningSystem.matches;
+    
+    if (matches.length === 0) {
+        learningSystem.model.fastDeviation = 0;
+        learningSystem.model.slowDeviation = 0;
+        return;
+    }
+    
+    // Быстрое отклонение - разница между прогнозом и реальным результатом в последнем матче
+    const lastMatch = matches[matches.length - 1];
+    if (lastMatch.predictions.combined && lastMatch.actual) {
+        learningSystem.model.fastDeviation = Math.abs(lastMatch.predictions.combined - lastMatch.actual);
+    }
+    
+    // Медленное отклонение - средняя ошибка по всем матчам
+    if (matches.length > 0) {
+        let totalError = 0;
+        let count = 0;
+        
+        matches.forEach(match => {
+            if (match.predictions.combined && match.actual) {
+                totalError += Math.abs(match.predictions.combined - match.actual);
+                count++;
+            }
+        });
+        
+        if (count > 0) {
+            learningSystem.model.slowDeviation = Math.round(totalError / count);
+        }
+    }
+}
+
+// Обновление индикаторов отклонений
+function updateDeviationIndicators() {
+    const fastDeviation = learningSystem.model.fastDeviation;
+    const slowDeviation = learningSystem.model.slowDeviation;
+    
+    // Обновляем значения
+    document.getElementById('fastDeviationValue').textContent = fastDeviation > 0 ? fastDeviation : '-';
+    document.getElementById('slowDeviationValue').textContent = slowDeviation > 0 ? slowDeviation : '-';
+    
+    // Добавляем визуальные индикаторы качества
+    const fastIndicator = document.getElementById('fastDeviationIndicator');
+    const slowIndicator = document.getElementById('slowDeviationIndicator');
+    
+    // Сбрасываем стили
+    fastIndicator.style.background = 'rgba(255, 255, 255, 0.05)';
+    fastIndicator.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+    slowIndicator.style.background = 'rgba(255, 255, 255, 0.05)';
+    slowIndicator.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+    
+    // Устанавливаем стили в зависимости от качества отклонений
+    if (fastDeviation > 0) {
+        if (fastDeviation <= 5) {
+            fastIndicator.style.background = 'rgba(34, 197, 94, 0.1)';
+            fastIndicator.style.borderColor = '#22c55e';
+        } else if (fastDeviation <= 10) {
+            fastIndicator.style.background = 'rgba(234, 179, 8, 0.1)';
+            fastIndicator.style.borderColor = '#eab308';
+        } else {
+            fastIndicator.style.background = 'rgba(239, 68, 68, 0.1)';
+            fastIndicator.style.borderColor = '#ef4444';
+        }
+    }
+    
+    if (slowDeviation > 0) {
+        if (slowDeviation <= 5) {
+            slowIndicator.style.background = 'rgba(34, 197, 94, 0.1)';
+            slowIndicator.style.borderColor = '#22c55e';
+        } else if (slowDeviation <= 10) {
+            slowIndicator.style.background = 'rgba(234, 179, 8, 0.1)';
+            slowIndicator.style.borderColor = '#eab308';
+        } else {
+            slowIndicator.style.background = 'rgba(239, 68, 68, 0.1)';
+            slowIndicator.style.borderColor = '#ef4444';
+        }
+    }
 }
 
 // Обновление модели обучения
@@ -2426,6 +2721,9 @@ function updateLearningModel() {
     
     // Эффективность модели
     learningSystem.model.efficiency = learningSystem.model.accuracy.combined;
+    
+    // Обновляем отклонения
+    updateDeviations();
 }
 
 // Обновление UI системы обучения
@@ -2453,16 +2751,6 @@ function updateLearningUI() {
     // Эффективность модели
     document.getElementById('modelEfficiency').style.width = model.efficiency + '%';
     document.getElementById('efficiencyValue').textContent = model.efficiency + '%';
-}
-
-// Обновление UI текущих прогнозов
-function updateCurrentPredictionsUI() {
-    const pred = learningSystem.currentPredictions;
-    
-    document.getElementById('currentCalcPred').textContent = pred.calculator || '-';
-    document.getElementById('currentMagicPred').textContent = pred.magic || '-';
-    document.getElementById('currentSidikPred').textContent = pred.sidik || '-';
-    document.getElementById('combinedPrediction').textContent = pred.combined || '-';
 }
 
 // Загрузка истории матчей
@@ -2550,7 +2838,9 @@ function resetLearningModel() {
                 accuracy: { calculator: 0, magic: 0, sidik: 0, combined: 0 },
                 totalMatches: 0,
                 avgError: 0,
-                efficiency: 0
+                efficiency: 0,
+                fastDeviation: 0,
+                slowDeviation: 0
             },
             currentPredictions: {
                 calculator: null,
@@ -2566,6 +2856,7 @@ function resetLearningModel() {
         updateLearningUI();
         loadMatchHistory();
         generateAccuracyChart();
+        updateDeviationIndicators();
         showLearningNotification('Модель обучения сброшена!');
     }
 }
