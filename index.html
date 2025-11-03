@@ -1121,6 +1121,7 @@
             font-size: 0.7rem;
         }
 
+        /* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ МЕТРИК ПРОИЗВОДИТЕЛЬНОСТИ */
         .performance-metrics {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1134,6 +1135,10 @@
             border-radius: 8px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .metric-value {
@@ -1483,6 +1488,169 @@
         .source-calc-color { background: var(--secondary); }
         .source-magic-color { background: var(--primary); }
         .source-sidik-color { background: #ffc107; }
+
+        /* НОВЫЕ СТИЛИ ДЛЯ АНАЛИЗА ТРЕНДА */
+        .trend-analysis {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trend-analysis::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+        }
+
+        .trend-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .trend-title {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trend-confidence {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #bdb2ff;
+        }
+
+        .trend-direction-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 12px 0;
+        }
+
+        .trend-arrow {
+            font-size: 2.5rem;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+
+        .trend-arrow.up {
+            color: #4ade80;
+            transform: scale(1.1);
+        }
+
+        .trend-arrow.down {
+            color: #f87171;
+            transform: scale(1.1);
+        }
+
+        .trend-arrow.neutral {
+            color: #fbbf24;
+        }
+
+        .trend-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .trend-metric {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .trend-metric-label {
+            font-size: 0.65rem;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+
+        .trend-metric-value {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .trend-recommendation {
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.15), rgba(247, 37, 133, 0.15));
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .recommendation-text {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .recommendation-details {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            color: #bdb2ff;
+        }
+
+        .trend-sources {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .trend-source {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            opacity: 0.7;
+        }
+
+        .source-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .source-calc { background: var(--secondary); }
+        .source-magic { background: var(--primary); }
+        .source-analytics { background: #ffc107; }
+
+        /* Анимации для тренда */
+        @keyframes pulse-grow {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulse-glow {
+            0% { filter: drop-shadow(0 0 5px currentColor); }
+            50% { filter: drop-shadow(0 0 15px currentColor); }
+            100% { filter: drop-shadow(0 0 5px currentColor); }
+        }
+
+        .trend-arrow.strong {
+            animation: pulse-grow 2s infinite, pulse-glow 2s infinite;
+        }
 
         /* Специальные стили для очень маленьких экранов */
         @media (max-height: 700px) {
@@ -2166,7 +2334,60 @@
                             <div style="font-size: 0.7rem;">На основе весов обучения</div>
                         </div>
 
-                        <!-- Новые индикаторы отклонений -->
+                        <!-- НОВЫЙ БЛОК АНАЛИЗА ТРЕНДА -->
+                        <div class="trend-analysis" id="trendAnalysis" style="display: none;">
+                            <div class="trend-header">
+                                <div class="trend-title">
+                                    <i>📈</i> Анализ направления тренда
+                                </div>
+                                <div class="trend-confidence" id="trendConfidence">-</div>
+                            </div>
+                            
+                            <div class="trend-direction-container">
+                                <div class="trend-arrow neutral" id="trendArrow">➡️</div>
+                            </div>
+                            
+                            <div class="trend-recommendation">
+                                <div class="recommendation-text" id="trendRecommendation">Анализируем данные...</div>
+                                <div class="recommendation-details" id="trendDetails">Собираем информацию со всех методов</div>
+                            </div>
+                            
+                            <div class="trend-metrics">
+                                <div class="trend-metric">
+                                    <div class="trend-metric-label">Сила тренда</div>
+                                    <div class="trend-metric-value" id="trendStrength">-</div>
+                                </div>
+                                <div class="trend-metric">
+                                    <div class="trend-metric-label">Согласованность</div>
+                                    <div class="trend-metric-value" id="trendAgreement">-</div>
+                                </div>
+                                <div class="trend-metric">
+                                    <div class="trend-metric-label">Волатильность</div>
+                                    <div class="trend-metric-value" id="trendVolatility">-</div>
+                                </div>
+                                <div class="trend-metric">
+                                    <div class="trend-metric-label">Импульс</div>
+                                    <div class="trend-metric-value" id="trendMomentum">-</div>
+                                </div>
+                            </div>
+                            
+                            <div class="trend-sources">
+                                <div class="trend-source">
+                                    <div class="source-dot source-calc"></div>
+                                    <span>Калькулятор</span>
+                                </div>
+                                <div class="trend-source">
+                                    <div class="source-dot source-magic"></div>
+                                    <span>Магический</span>
+                                </div>
+                                <div class="trend-source">
+                                    <div class="source-dot source-analytics"></div>
+                                    <span>Аналитика</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Существующие индикаторы отклонений -->
                         <div class="deviation-indicators">
                             <div class="deviation-indicator" id="fastDeviationIndicator">
                                 <div class="deviation-icon">⚡</div>
@@ -2391,6 +2612,9 @@ function updateCurrentPredictions() {
     
     // Обновляем UI
     updateCurrentPredictionsUI();
+    
+    // Анализируем тренд
+    analyzeTrendDirection();
 }
 
 // Расчет комбинированного прогноза с учетом доступных данных
@@ -2478,6 +2702,344 @@ function updatePredictionSourceIndicators() {
     }
 }
 
+// НОВЫЕ ФУНКЦИИ ДЛЯ АНАЛИЗА ТРЕНДА
+
+function analyzeTrendDirection() {
+    const trendAnalysis = document.getElementById('trendAnalysis');
+    
+    // Получаем данные из всех источников
+    const calcPred = learningSystem.currentPredictions.calculator;
+    const magicPred = learningSystem.currentPredictions.magic;
+    const sidikPred = learningSystem.currentPredictions.sidik;
+    
+    // Получаем исторические данные для анализа тренда
+    const inputData = learningSystem.currentPredictions.inputData;
+    
+    let trendData = {
+        direction: 'neutral', // 'up', 'down', 'neutral'
+        strength: 0, // 0-100
+        confidence: 0, // 0-100
+        recommendation: '',
+        details: '',
+        agreement: 0, // согласованность методов
+        volatility: 0,
+        momentum: 0
+    };
+    
+    // Если недостаточно данных, скрываем блок
+    if (!calcPred && !magicPred && !sidikPred) {
+        trendAnalysis.style.display = 'none';
+        return trendData;
+    }
+    
+    // Показываем блок анализа
+    trendAnalysis.style.display = 'block';
+    
+    // Анализируем данные из калькулятора
+    let calcTrend = analyzeCalculatorTrend(inputData);
+    let magicTrend = analyzeMagicTrend();
+    let analyticsTrend = analyzeAnalyticsTrend();
+    
+    // Собираем все тренды
+    const trends = [];
+    if (calcTrend) trends.push(calcTrend);
+    if (magicTrend) trends.push(magicTrend);
+    if (analyticsTrend) trends.push(analyticsTrend);
+    
+    // Если есть тренды, анализируем общее направление
+    if (trends.length > 0) {
+        trendData = calculateOverallTrend(trends);
+    } else {
+        trendData = {
+            direction: 'neutral',
+            strength: 0,
+            confidence: 0,
+            recommendation: 'Недостаточно данных для анализа тренда',
+            details: 'Введите данные периодов для получения рекомендаций',
+            agreement: 0,
+            volatility: 0,
+            momentum: 0
+        };
+    }
+    
+    // Обновляем UI
+    updateTrendUI(trendData);
+    
+    return trendData;
+}
+
+function analyzeCalculatorTrend(inputData) {
+    if (!inputData || !inputData.totalFirstPeriod) return null;
+    
+    const p1 = inputData.totalFirstPeriod;
+    const p2 = inputData.totalSecondPeriod;
+    const p3 = inputData.totalThirdPeriod;
+    
+    let direction = 'neutral';
+    let strength = 0;
+    
+    if (currentMode === 'two') {
+        // Анализ для 2 периодов
+        const diff = p2 - p1;
+        if (diff > 5) {
+            direction = 'up';
+            strength = Math.min(100, (diff / p1) * 200);
+        } else if (diff < -5) {
+            direction = 'down';
+            strength = Math.min(100, Math.abs(diff / p1) * 200);
+        }
+    } else {
+        // Анализ для 3 периодов
+        const trends = [];
+        if (p2 > p1) trends.push('up');
+        if (p3 > p2) trends.push('up');
+        if (p2 < p1) trends.push('down');
+        if (p3 < p2) trends.push('down');
+        
+        const upCount = trends.filter(t => t === 'up').length;
+        const downCount = trends.filter(t => t === 'down').length;
+        
+        if (upCount > downCount) {
+            direction = 'up';
+            strength = (upCount / 2) * 100;
+        } else if (downCount > upCount) {
+            direction = 'down';
+            strength = (downCount / 2) * 100;
+        }
+        
+        // Учитываем величину изменений
+        const avgChange = ((p2 - p1) + (p3 - p2)) / 2;
+        strength = Math.min(100, strength + Math.abs(avgChange) * 2);
+    }
+    
+    return {
+        source: 'calculator',
+        direction: direction,
+        strength: strength,
+        confidence: Math.min(100, strength * 0.8)
+    };
+}
+
+function analyzeMagicTrend() {
+    const trendValueElem = document.getElementById('trendValue');
+    const energyValueElem = document.getElementById('energyValue');
+    
+    if (!trendValueElem || trendValueElem.textContent === '1.0x') return null;
+    
+    const trendText = trendValueElem.textContent;
+    let direction = 'neutral';
+    let strength = 0;
+    
+    if (trendText.includes('1.1')) {
+        direction = 'up';
+        strength = 70;
+    } else if (trendText.includes('0.9')) {
+        direction = 'down';
+        strength = 70;
+    }
+    
+    // Учитываем энергию магического квадрата
+    if (energyValueElem && energyValueElem.textContent !== '0%') {
+        const energy = parseInt(energyValueElem.textContent);
+        strength = Math.min(100, strength + (energy / 100) * 30);
+    }
+    
+    return {
+        source: 'magic',
+        direction: direction,
+        strength: strength,
+        confidence: Math.min(100, strength * 0.9)
+    };
+}
+
+function analyzeAnalyticsTrend() {
+    const trendIndicator = document.getElementById('trendIndicator');
+    if (!trendIndicator) return null;
+    
+    let direction = 'neutral';
+    let strength = 0;
+    
+    if (trendIndicator.classList.contains('trend-up')) {
+        direction = 'up';
+        strength = 75;
+    } else if (trendIndicator.classList.contains('trend-down')) {
+        direction = 'down';
+        strength = 75;
+    }
+    
+    // Учитываем уверенность методов аналитики
+    const expSmoothConfidence = parseInt(document.getElementById('expSmoothConfidence')?.style.width) || 0;
+    const weightedRegConfidence = parseInt(document.getElementById('weightedRegConfidence')?.style.width) || 0;
+    const adaptiveConfidence = parseInt(document.getElementById('adaptiveConfidence')?.style.width) || 0;
+    
+    const avgConfidence = (expSmoothConfidence + weightedRegConfidence + adaptiveConfidence) / 3;
+    strength = Math.min(100, strength + (avgConfidence / 100) * 25);
+    
+    return {
+        source: 'analytics',
+        direction: direction,
+        strength: strength,
+        confidence: Math.min(100, avgConfidence * 0.8)
+    };
+}
+
+function calculateOverallTrend(trends) {
+    if (trends.length === 0) {
+        return {
+            direction: 'neutral',
+            strength: 0,
+            confidence: 0,
+            recommendation: 'Недостаточно данных',
+            details: 'Требуется больше информации для анализа',
+            agreement: 0,
+            volatility: 0,
+            momentum: 0
+        };
+    }
+    
+    // Подсчитываем голоса за каждое направление
+    const votes = { up: 0, down: 0, neutral: 0 };
+    let totalStrength = 0;
+    let totalConfidence = 0;
+    
+    trends.forEach(trend => {
+        votes[trend.direction]++;
+        totalStrength += trend.strength;
+        totalConfidence += trend.confidence;
+    });
+    
+    // Определяем преобладающее направление
+    let overallDirection = 'neutral';
+    if (votes.up > votes.down && votes.up > votes.neutral) {
+        overallDirection = 'up';
+    } else if (votes.down > votes.up && votes.down > votes.neutral) {
+        overallDirection = 'down';
+    }
+    
+    // Рассчитываем согласованность методов
+    const agreement = (Math.max(votes.up, votes.down, votes.neutral) / trends.length) * 100;
+    
+    // Средние показатели
+    const avgStrength = totalStrength / trends.length;
+    const avgConfidence = totalConfidence / trends.length;
+    
+    // Генерируем рекомендации
+    const recommendation = generateRecommendation(overallDirection, avgStrength, agreement);
+    
+    return {
+        direction: overallDirection,
+        strength: Math.round(avgStrength),
+        confidence: Math.round(avgConfidence),
+        recommendation: recommendation.text,
+        details: recommendation.details,
+        agreement: Math.round(agreement),
+        volatility: calculateVolatility(),
+        momentum: calculateMomentum(overallDirection, avgStrength)
+    };
+}
+
+function generateRecommendation(direction, strength, agreement) {
+    let text = '';
+    let details = '';
+    
+    if (direction === 'up') {
+        if (strength > 70 && agreement > 70) {
+            text = '🎯 СИЛЬНЫЙ СИГНАЛ НА ПОВЫШЕНИЕ';
+            details = 'Все методы указывают на рост. Рекомендуется играть на ТБ (тотал больше)';
+        } else if (strength > 50) {
+            text = '📈 УМЕРЕННЫЙ РОСТ';
+            details = 'Преобладают сигналы роста. Рассмотрите ставки на повышение';
+        } else {
+            text = '↗️ СЛАБЫЙ РОСТ';
+            details = 'Есть признаки роста, но необходима осторожность';
+        }
+    } else if (direction === 'down') {
+        if (strength > 70 && agreement > 70) {
+            text = '🎯 СИЛЬНЫЙ СИГНАЛ НА ПОНИЖЕНИЕ';
+            details = 'Все методы указывают на падение. Рекомендуется играть на ТМ (тотал меньше)';
+        } else if (strength > 50) {
+            text = '📉 УМЕРЕННОЕ ПАДЕНИЕ';
+            details = 'Преобладают сигналы падения. Рассмотрите ставки на понижение';
+        } else {
+            text = '↘️ СЛАБОЕ ПАДЕНИЕ';
+            details = 'Есть признаки падения, но необходима осторожность';
+        }
+    } else {
+        text = '➡️ СТАБИЛЬНАЯ ДИНАМИКА';
+        details = 'Тренд не выражен. Рекомендуется дождаться clearer signals';
+    }
+    
+    return { text, details };
+}
+
+function calculateVolatility() {
+    // Простой расчет волатильности на основе исторических данных
+    const matches = learningSystem.matches;
+    if (matches.length < 2) return 50;
+    
+    const errors = matches.map(match => 
+        Math.abs(match.predictions.combined - match.actual)
+    );
+    
+    const avgError = errors.reduce((a, b) => a + b, 0) / errors.length;
+    const maxPossibleError = 50; // Предполагаем максимальную ошибку 50 очков
+    
+    return Math.round((avgError / maxPossibleError) * 100);
+}
+
+function calculateMomentum(direction, strength) {
+    // Расчет импульса на основе силы и направления тренда
+    let momentum = strength;
+    
+    if (direction === 'up') {
+        momentum += 20;
+    } else if (direction === 'down') {
+        momentum -= 20;
+    }
+    
+    return Math.max(0, Math.min(100, momentum));
+}
+
+function updateTrendUI(trendData) {
+    const trendArrow = document.getElementById('trendArrow');
+    const trendRecommendation = document.getElementById('trendRecommendation');
+    const trendDetails = document.getElementById('trendDetails');
+    const trendConfidence = document.getElementById('trendConfidence');
+    const trendStrength = document.getElementById('trendStrength');
+    const trendAgreement = document.getElementById('trendAgreement');
+    const trendVolatility = document.getElementById('trendVolatility');
+    const trendMomentum = document.getElementById('trendMomentum');
+    
+    // Обновляем стрелку направления
+    trendArrow.className = 'trend-arrow';
+    if (trendData.direction === 'up') {
+        trendArrow.textContent = '↗️';
+        trendArrow.classList.add('up');
+    } else if (trendData.direction === 'down') {
+        trendArrow.textContent = '↘️';
+        trendArrow.classList.add('down');
+    } else {
+        trendArrow.textContent = '➡️';
+        trendArrow.classList.add('neutral');
+    }
+    
+    // Добавляем анимацию для сильных трендов
+    if (trendData.strength > 70) {
+        trendArrow.classList.add('strong');
+    }
+    
+    // Обновляем текстовые элементы
+    trendRecommendation.textContent = trendData.recommendation;
+    trendDetails.textContent = trendData.details;
+    trendConfidence.textContent = `Уверенность: ${trendData.confidence}%`;
+    
+    // Обновляем метрики
+    trendStrength.textContent = `${trendData.strength}%`;
+    trendAgreement.textContent = `${trendData.agreement}%`;
+    trendVolatility.textContent = `${trendData.volatility}%`;
+    trendMomentum.textContent = `${trendData.momentum}%`;
+}
+
 // Инициализация системы самообучения
 function initLearningSystem() {
     loadLearningData();
@@ -2487,6 +3049,9 @@ function initLearningSystem() {
     loadMatchHistory();
     updatePredictionSourceIndicators();
     updateDeviationIndicators();
+    
+    // Инициализируем анализ тренда
+    analyzeTrendDirection();
 }
 
 // Загрузка данных обучения
@@ -2528,8 +3093,8 @@ function getCurrentInputData() {
 // Сохранение реального результата
 function saveActualResult() {
     const actualTotal = parseInt(document.getElementById('actualTotal').value);
-    if (!actualTotal || actualTotal < 100) {
-        alert('Введите корректный реальный тотал (не менее 100)');
+    if (!actualTotal) {
+        alert('Введите корректный реальный тотал');
         return;
     }
     
