@@ -1652,6 +1652,125 @@
             animation: pulse-grow 2s infinite, pulse-glow 2s infinite;
         }
 
+        /* Стили для новой вкладки Инструкция */
+        .instructions-container {
+            padding: 10px;
+            gap: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .instructions-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instructions-card-title {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions-section {
+            margin-bottom: 20px;
+        }
+
+        .instructions-section-title {
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .instructions-content {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .instructions-step {
+            margin-bottom: 10px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .instructions-step::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .icon-explanation {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 0.75rem;
+        }
+
+        .icon-box {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .warning-box {
+            background: rgba(247, 37, 133, 0.2);
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .warning-title {
+            color: var(--secondary);
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .warning-text {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tip-box {
+            background: rgba(76, 201, 240, 0.2);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .tip-title {
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .tip-text {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
         /* Специальные стили для очень маленьких экранов */
         @media (max-height: 700px) {
             .header {
@@ -1913,6 +2032,7 @@
             <button class="tab" onclick="setTab('magic')">Магический квадрат</button>
             <button class="tab" onclick="setTab('sidik')">Сидик Авган</button>
             <button class="tab" onclick="setTab('learning')">Самообучение</button>
+            <button class="tab" onclick="setTab('instructions')">Инструкция</button>
         </div>
         <div class="mode-switcher">
             <button class="mode-btn active" onclick="setMode('two')">2 периода</button>
@@ -2514,6 +2634,246 @@
                         <button class="adaptive-btn primary" onclick="exportLearningData()">
                             <i>📤</i> Экспорт данных
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- НОВАЯ ВКЛАДКА ИНСТРУКЦИЯ -->
+        <div class="tab-content" id="instructions-tab">
+            <div class="instructions-container">
+                <div class="instructions-card">
+                    <h2 class="instructions-card-title">
+                        <i>📖</i> Полное руководство по Кибербаскетбол PRO
+                    </h2>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>🎯</i> Общее описание
+                        </div>
+                        <div class="instructions-content">
+                            <p>Кибербаскетбол PRO - это продвинутая система прогнозирования тоталов в баскетбольных матчах, использующая 5 различных методов анализа:</p>
+                            
+                            <div class="instructions-step">1. <strong>Калькулятор</strong> - базовые математические расчеты</div>
+                            <div class="instructions-step">2. <strong>Аналитика</strong> - визуализация и статистический анализ</div>
+                            <div class="instructions-step">3. <strong>Магический квадрат</strong> - нумерологический подход</div>
+                            <div class="instructions-step">4. <strong>Сидик Авган</strong> - эзотерический метод прогнозирования</div>
+                            <div class="instructions-step">5. <strong>Самообучение</strong> - адаптивная система на основе ML</div>
+                            
+                            <div class="tip-box">
+                                <div class="tip-title">💡 Совет</div>
+                                <div class="tip-text">Для максимальной точности используйте все методы и сравнивайте результаты. Система самообучения автоматически определяет наиболее точный метод на основе вашей истории.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>🏀</i> Калькулятор - Основной инструмент
+                        </div>
+                        <div class="instructions-content">
+                            <p><strong>Режимы работы:</strong></p>
+                            <div class="instructions-step"><strong>2 периода</strong> - для матчей с двумя сыгранными периодами</div>
+                            <div class="instructions-step"><strong>3 периода</strong> - для матчей с тремя сыгранными периодами</div>
+                            
+                            <p><strong>Как использовать:</strong></p>
+                            <div class="instructions-step">1. Выберите режим (2 или 3 периода)</div>
+                            <div class="instructions-step">2. Введите очки команд для каждого периода</div>
+                            <div class="instructions-step">3. Система автоматически рассчитает прогноз тотала</div>
+                            
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Важно</div>
+                                <div class="warning-text">В режиме 3 периодов система показывает два прогноза: основной и дополнительный расчет. Используйте оба значения для более точного анализа.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>📊</i> Аналитика - Визуализация данных
+                        </div>
+                        <div class="instructions-content">
+                            <p>Эта вкладка предоставляет углубленный анализ данных с использованием трех методов прогнозирования:</p>
+                            
+                            <div class="instructions-step"><strong>Экспоненциальное сглаживание</strong> - учитывает последние тенденции с большим весом</div>
+                            <div class="instructions-step"><strong>Взвешенная регрессия</strong> - статистический анализ с доверительными интервалами</div>
+                            <div class="instructions-step"><strong>Адаптивный алгоритм</strong> - автоматически подстраивается под волатильность данных</div>
+                            
+                            <p><strong>Индикаторы риска:</strong></p>
+                            <div class="icon-explanation">
+                                <div class="icon-box">✅</div>
+                                <div><strong>Низкий риск</strong> - стабильная динамика, надежный прогноз</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">⚠️</div>
+                                <div><strong>Умеренный риск</strong> - средняя волатильность</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">🚨</div>
+                                <div><strong>Высокий риск</strong> - высокая нестабильность, осторожность в ставках</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>🔮</i> Магический квадрат - Нумерология
+                        </div>
+                        <div class="instructions-content">
+                            <p>Метод основан на преобразовании баскетбольных данных в нумерологическую матрицу 3x3:</p>
+                            
+                            <div class="instructions-step"><strong>Активные ячейки</strong> - показывают энергетическую активность периодов</div>
+                            <div class="instructions-step"><strong>Диагонали силы</strong> - главная и побочная диагонали показывают баланс энергий</div>
+                            <div class="instructions-step"><strong>Центр квадрата</strong> - самая важная ячейка, определяет стабильность прогноза</div>
+                            
+                            <p><strong>Уровни энергии:</strong></p>
+                            <div class="icon-explanation">
+                                <div class="icon-box" style="background: #ef4444;">&nbsp;</div>
+                                <div><strong>Низкий</strong> (0-33%) - слабая взаимосвязь данных</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box" style="background: #f59e0b;">&nbsp;</div>
+                                <div><strong>Средний</strong> (34-66%) - стабильные показатели</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box" style="background: #10b981;">&nbsp;</div>
+                                <div><strong>Высокий</strong> (67-100%) - сильная динамика и точность</div>
+                            </div>
+                            
+                            <div class="tip-box">
+                                <div class="tip-title">💡 Магический совет</div>
+                                <div class="tip-text">Обращайте внимание на баланс диагоналей. Если разница больше 10 пунктов - это указывает на сильный тренд в определенном направлении.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>🧊</i> Сидик Авган - Эзотерический метод
+                        </div>
+                        <div class="instructions-content">
+                            <p>Уникальный метод, сочетающий нумерологию, астрологию и временные факторы:</p>
+                            
+                            <div class="instructions-step"><strong>Нумерологические корни</strong> - преобразование чисел в однозначные цифры (1-9)</div>
+                            <div class="instructions-step"><strong>Временные факторы</strong> - учет даты, времени и дня недели матча</div>
+                            <div class="instructions-step"><strong>Магический квадрат 4x4</strong> - расширенная версия классического квадрата</div>
+                            
+                            <p><strong>Значения нумерологических корней:</strong></p>
+                            <div class="instructions-step"><strong>1</strong> - Начало, лидерство, уверенность</div>
+                            <div class="instructions-step"><strong>2</strong> - Баланс, партнерство, гармония</div>
+                            <div class="instructions-step"><strong>3</strong> - Творчество, рост, экспрессия</div>
+                            <div class="instructions-step"><strong>4</strong> - Стабильность, порядок, надежность</div>
+                            <div class="instructions-step"><strong>5</strong> - Изменения, свобода, адаптивность</div>
+                            <div class="instructions-step"><strong>6</strong> - Ответственность, забота, семья</div>
+                            <div class="instructions-step"><strong>7</strong> - Анализ, мудрость, интуиция</div>
+                            <div class="instructions-step"><strong>8</strong> - Изобилие, успех, материальные блага</div>
+                            <div class="instructions-step"><strong>9</strong> - Завершение, мудрость, трансформация</div>
+                            
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Особое внимание</div>
+                                <div class="warning-text">Число 7 считается символом удачи в этом методе. Если в расчетах преобладает корень 7 - это благоприятный знак.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>🧠</i> Самообучение - Умная система
+                        </div>
+                        <div class="instructions-content">
+                            <p>Самообучающаяся система, которая улучшает точность прогнозов на основе вашей истории:</p>
+                            
+                            <div class="instructions-step"><strong>Комбинированный прогноз</strong> - средневзвешенное значение всех методов</div>
+                            <div class="instructions-step"><strong>Анализ тренда</strong> - определяет направление и силу тренда</div>
+                            <div class="instructions-step"><strong>Метрики производительности</strong> - отслеживает точность каждого метода</div>
+                            <div class="instructions-step"><strong>Адаптивные веса</strong> - автоматически корректирует значимость методов</div>
+                            
+                            <p><strong>Как использовать систему самообучения:</strong></p>
+                            <div class="instructions-step">1. Вводите данные периодов во всех вкладках</div>
+                            <div class="instructions-step">2. После матча вводите реальный тотал в разделе "Реальный тотал матча"</div>
+                            <div class="instructions-step">3. Система автоматически обновит веса методов</div>
+                            <div class="instructions-step">4. Следите за метриками точности в реальном времени</div>
+                            
+                            <div class="tip-box">
+                                <div class="tip-title">💡 Профессиональный совет</div>
+                                <div class="tip-text">Для максимальной эффективности сохраняйте результаты каждого матча. После 10-15 сохраненных матчей система достигнет оптимальной точности.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>🎨</i> Интерфейс и настройки
+                        </div>
+                        <div class="instructions-content">
+                            <p><strong>Темы оформления:</strong></p>
+                            <div class="icon-explanation">
+                                <div class="icon-box">☀️</div>
+                                <div><strong>Солнечная</strong> - яркая тема для дневного использования</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">🌙</div>
+                                <div><strong>Лунная</strong> - спокойная тема для вечера</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">🌕</div>
+                                <div><strong>Полная луна</strong> - тема с акцентом на интуицию</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">🌑</div>
+                                <div><strong>Новая луна</strong> - минималистичная темная тема</div>
+                            </div>
+                            
+                            <p><strong>Основные иконки интерфейса:</strong></p>
+                            <div class="icon-explanation">
+                                <div class="icon-box">🏀</div>
+                                <div><strong>Очистить все</strong> - кнопка в правом верхнем углу для сброса всех данных</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">📊</div>
+                                <div><strong>Данные и расчеты</strong> - символ аналитических методов</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">🔮</div>
+                                <div><strong>Магия и интуиция</strong> - символ эзотерических методов</div>
+                            </div>
+                            <div class="icon-explanation">
+                                <div class="icon-box">🧠</div>
+                                <div><strong>Интеллект и обучение</strong> - символ AI и машинного обучения</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions-section">
+                        <div class="instructions-section-title">
+                            <i>🚀</i> Стратегия работы для максимальной точности
+                        </div>
+                        <div class="instructions-content">
+                            <p><strong>Пошаговая инструкция для профессионалов:</strong></p>
+                            
+                            <div class="instructions-step">1. <strong>Начните с Калькулятора</strong> - введите данные периодов</div>
+                            <div class="instructions-step">2. <strong>Проверьте Аналитику</strong> - изучите тренды и риски</div>
+                            <div class="instructions-step">3. <strong>Используйте Магический квадрат</strong> - оцените энергетику матча</div>
+                            <div class="instructions-step">4. <strong>Примените Сидик Авган</strong> - учтите нумерологические факторы</div>
+                            <div class="instructions-step">5. <strong>Сравните все прогнозы</strong> в системе Самообучения</div>
+                            <div class="instructions-step">6. <strong>Следуйте комбинированному прогнозу</strong> - он учитывает вес каждого метода</div>
+                            <div class="instructions-step">7. <strong>Сохраняйте результат</strong> после матча для улучшения системы</div>
+                            
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Золотые правила</div>
+                                <div class="warning-text">
+                                    - Никогда не полагайтесь только на один метод<br>
+                                    - Всегда учитывайте индикаторы риска<br>
+                                    - Регулярно обновляйте систему самообучения<br>
+                                    - Сравнивайте прогнозы с аналитикой букмекеров
+                                </div>
+                            </div>
+                            
+                            <div class="tip-box">
+                                <div class="tip-title">💡 Секрет успеха</div>
+                                <div class="tip-text">Наиболее точные прогнозы получаются при согласованности всех методов. Если 3 из 5 методов показывают близкие значения - это сильный сигнал для ставки.</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
