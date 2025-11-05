@@ -419,6 +419,31 @@
 
         .magic-cell.center {
             border-width: 3px;
+            /* Новые стили для центральной ячейки */
+            transition: all 0.5s ease;
+        }
+
+        /* НОВЫЕ СТИЛИ ДЛЯ ЦЕНТРАЛЬНОЙ ЯЧЕЙКИ */
+        .magic-cell.center-strong {
+            background: linear-gradient(135deg, var(--primary), #00a8ff);
+            border-color: #00a8ff;
+            box-shadow: 0 0 20px var(--primary), 0 0 30px rgba(76, 201, 240, 0.5);
+            color: black;
+            font-weight: bold;
+            animation: pulse-strong 2s infinite;
+        }
+
+        .magic-cell.center-weak {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            box-shadow: none;
+        }
+
+        @keyframes pulse-strong {
+            0% { transform: scale(1); box-shadow: 0 0 20px var(--primary), 0 0 30px rgba(76, 201, 240, 0.5); }
+            50% { transform: scale(1.08); box-shadow: 0 0 25px var(--primary), 0 0 40px rgba(76, 201, 240, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 20px var(--primary), 0 0 30px rgba(76, 201, 240, 0.5); }
         }
 
         .cell-index {
@@ -543,9 +568,22 @@
             transition: width 0.5s ease;
         }
 
-        .energy-low { background: #ef4444; width: 33%; }
-        .energy-medium { background: #f59e0b; width: 66%; }
-        .energy-high { background: #10b981; width: 100%; }
+        /* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ УРОВНЕЙ ЭНЕРГИИ */
+        .energy-low { 
+            background: linear-gradient(90deg, #ef4444, #f87171); 
+            width: 33%; 
+            box-shadow: 0 0 8px #ef4444;
+        }
+        .energy-medium { 
+            background: linear-gradient(90deg, #f59e0b, #fbbf24); 
+            width: 66%; 
+            box-shadow: 0 0 8px #f59e0b;
+        }
+        .energy-high { 
+            background: linear-gradient(90deg, #10b981, #34d399); 
+            width: 100%; 
+            box-shadow: 0 0 12px #10b981;
+        }
 
         .magic-result {
             text-align: center;
@@ -639,6 +677,17 @@
         .legend-corner {
             background: transparent;
             border: 2px double var(--primary);
+        }
+
+        /* Новые стили для легенды центра */
+        .legend-center-strong {
+            background: linear-gradient(135deg, var(--primary), #00a8ff);
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .legend-center-weak {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         /* Стили для вкладки Сидика Авгана */
@@ -2264,6 +2313,15 @@
                     <div class="legend-item">
                         <div class="legend-color legend-corner"></div>
                         <span>Угловые ячейки</span>
+                    </div>
+                    <!-- НОВАЯ ЛЕГЕНДА ДЛЯ ЦЕНТРА -->
+                    <div class="legend-item">
+                        <div class="legend-color legend-center-strong"></div>
+                        <span>Сильный центр</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-center-weak"></div>
+                        <span>Слабый центр</span>
                     </div>
                 </div>
             </div>
@@ -4331,6 +4389,12 @@ function updateMagicSquare() {
         }
         if (i === 4) {
             cell.classList.add('center');
+            // НОВЫЙ КОД: Добавляем классы для центральной ячейки в зависимости от значения
+            if (magicValues[i] > 10) {
+                cell.classList.add('center-strong');
+            } else if (magicValues[i] < 5) {
+                cell.classList.add('center-weak');
+            }
         }
         
         if (i === 0 || i === 4 || i === 8) {
@@ -4502,10 +4566,13 @@ function updateMagicInterpretation(calculations) {
         interpretation += "Высокая активность - экспрессивная игра! ";
     }
     
+    // НОВЫЙ КОД: Добавляем информацию о силе центра
     if (calculations.centerPower > 10) {
-        interpretation += "Сильный центр обеспечивает стабильность. ";
+        interpretation += "<strong>Сильный центр</strong> обеспечивает стабильность прогноза. ";
     } else if (calculations.centerPower < 5) {
-        interpretation += "Слабый центр указывает на неопределенность. ";
+        interpretation += "<strong>Слабый центр</strong> указывает на неопределенность. ";
+    } else {
+        interpretation += "<strong>Средний центр</strong> - умеренная надежность прогноза. ";
     }
     
     document.getElementById('magicInterpretation').innerHTML = interpretation;
